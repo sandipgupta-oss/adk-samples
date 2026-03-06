@@ -262,7 +262,7 @@ async def save_artifacts_to_gcs_tool(tool_context: ToolContext) -> str:
 
 async def search_user_files_tool(
     tool_context: ToolContext,
-) -> dict[str, list[dict[str, str]]]:
+) -> dict[str, list[str]]:
     """Lists all available files for the current user."""
     continue_processing, user_id = _get_user_id(tool_context)
     if not continue_processing:
@@ -272,7 +272,7 @@ async def search_user_files_tool(
     logger.info("Searching for files in GCS with prefix: %s", prefix)
     blobs = storage_client.list_blobs(GCS_BUCKET, prefix=prefix, delimiter="/")
     files = [
-        {"filename": os.path.basename(blob.name), "uri": blob.name}
+        os.path.basename(blob.name)
         for blob in blobs
         if not blob.name.endswith("/")
         and not blob.name.startswith(f"{prefix}processed_guideline_")
@@ -410,13 +410,14 @@ def _format_guideline_string(guideline_obj: Guideline) -> str:
 
 
 async def guideline_processor_tool(
-    gcs_uri: str, tool_context: ToolContext
+    filename: str, tool_context: ToolContext
 ) -> str:
     """Processes a single guideline file from GCS and returns a formatted report."""
     continue_processing, user_id = _get_user_id(tool_context)
     if not continue_processing:
         return user_id  # This is the pending auth message
 
+    gcs_uri = f"{tool_context.session.app_name}/{user_id}/{user_id}/{filename}"
     result = await _process_single_guideline(user_id, gcs_uri, tool_context)
 
     guideline_data = result["guideline"]
@@ -606,18 +607,21 @@ async def asset_evaluator_tool(
     if not continue_processing:
         return user_id  # This is the pending auth message
 
+    prefix = f"{tool_context.session.app_name}/{user_id}/{user_id}"
+
     tasks = [
         _evaluate_single_asset(
             tool_context=tool_context,
             user_id=user_id,
-            asset_uri=asset["asset_uri"],
+            asset_uri=f"{prefix}/{asset['asset_name']}",
             asset_name=asset["asset_name"],
             asset_id=asset["asset_id"],
             category=asset["category"],
             asset_prompt=asset.get("asset_prompt", ""),
-            video_reference_image_uris=asset.get(
-                "video_reference_image_uris", []
-            ),
+            video_reference_image_uris=[
+                f"{prefix}/{filename}"
+                for filename in asset.get("video_reference_image_files", [])
+            ],
         )
         for asset in assets
     ]

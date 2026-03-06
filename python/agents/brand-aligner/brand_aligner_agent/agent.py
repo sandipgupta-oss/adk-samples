@@ -60,12 +60,11 @@ asset_evaluator_agent = LlmAgent(
         1.  Announce to the user that you are starting the asset evaluation step. For example: "Step 2: Evaluating Assets..."
         2.  Iterate through the `session.state['asset_files']` list. For EACH asset file:
             a. Prepare an asset dictionary containing:
-               * `asset_uri`: The GCS URI of the asset.
-               * `asset_name`: The name of the asset file extracted from the URI.
+               * `asset_name`: The name of the asset file from the state.
                * `asset_id`: A string representation of the index of the current asset (e.g., '1', '2', '3').
-               * `category`: 'IMAGE' or 'VIDEO' based on filename/type.
+               * `category`: 'IMAGE' or 'VIDEO' based on file name / type.
                * `asset_prompt`: User provided prompt or empty string.
-               * `video_reference_image_uris`: Reference image URIs for video assets (if any), else empty list.
+               * `video_reference_image_files`: Reference image file names for video assets (if any), else empty list.
             b. Call `asset_evaluator_tool` with this single asset dictionary.
             c. The tool will return a formatted Markdown report.
             d. Present the report to the user.
@@ -87,7 +86,7 @@ guideline_processor_agent = LlmAgent(
         **WORKFLOW:**
         1.  Announce to the user that you are starting the guideline processing step. For example: "Step 1: Processing Guidelines..."
         2.  Iterate through `session.state['guideline_files']`. For EACH file:
-            a. Call `guideline_processor_tool` with the single GCS URI.
+            a. Call `guideline_processor_tool` with the file name from the state.
             b. The tool will return a formatted Markdown report.
             c. Present the report to the user.
         3.  After processing ALL guidelines, call the `asset_evaluator_agent` to proceed to the next step.
@@ -115,7 +114,7 @@ root_agent = LlmAgent(
 
         2.  **Handle and Categorize Files:**
             *   **File Handling:** After the user uploads files or asks to find existing files, your first step is to call `save_artifacts_to_gcs_tool` to save any in-session files to persistent storage. After that, call `search_user_files_tool` to get a complete list of all user files.
-            *   **Display:** The tool returns a list of dictionaries, each containing `filename` (for display) and `uri` (for execution). ALWAYS use the `filename` when talking to the user. ALWAYS use the `uri` when calling tools or saving state.
+            *   **Display:** The tool returns a list of file names which you can display to the user.
             *   **Confirmation:** After retrieving the complete list of files, classify them as **guideline files** or **asset files** depending on the file extension (PDF, MD and TEXT files are guidelines, while image and video files are assets), then interact with the user to confirm the exact list of **guideline files** and **asset files** to be used in the evaluation.
 
         3.  **Create and Confirm Plan:**
@@ -128,7 +127,7 @@ root_agent = LlmAgent(
                 4. Provide a final summary."
 
         4.  **Store Plan:**
-            *   After user confirmation, call `save_plan_to_state_tool` with the categorized lists of GCS URIs.
+            *   After user confirmation, call `save_plan_to_state_tool` with the categorized lists of file names.
 
         5.  **Execute Plan:**
             *   If there are assets to evaluate, your final step is to call the `guideline_processor_agent` sub-agent to begin the execution chain.
