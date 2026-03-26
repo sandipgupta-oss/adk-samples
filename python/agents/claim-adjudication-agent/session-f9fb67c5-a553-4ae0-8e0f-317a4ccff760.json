@@ -1,0 +1,504 @@
+{
+  "id": "f9fb67c5-a553-4ae0-8e0f-317a4ccff760",
+  "appName": "claim_adjudication_agent",
+  "userId": "user",
+  "state": {
+    "active_policy_type": "Elevate",
+    "CLAIMIDX0001": [
+      {
+        "name": "FINAL BILL and DISCHAREGE.pdf",
+        "description": "File for claim CLAIMIDX0001",
+        "mime_type": "application/pdf",
+        "gcs_path": "gs://agentspace-demo-ds-bucket-proj-genai-1729/health_claim_documents/CLAIMIDX0001/FINAL BILL and DISCHAREGE.pdf"
+      },
+      {
+        "name": "PolicyCopy_225002043900.pdf",
+        "description": "File for claim CLAIMIDX0001",
+        "mime_type": "application/pdf",
+        "gcs_path": "gs://agentspace-demo-ds-bucket-proj-genai-1729/health_claim_documents/CLAIMIDX0001/PolicyCopy_225002043900.pdf"
+      }
+    ],
+    "active_case_id": "CLAIMIDX0001",
+    "claim_admissibility_agent_output": "**Phase 1: Identity & Eligibility Verification**\n\n1.  **Identify Matching**:\n    *   **Claim Documents (FINAL BILL and DISCHAREGE.pdf)**:\n        *   Patient Name: MR GNANAPRAKASH.S\n        *   UHID: KIL-26732\n        *   IP No: KIL-IP008735\n    *   **Policy Record (PolicyCopy_225002043900.pdf)**:\n        *   Policyholder Name: Rinki (Page 3 of 23)\n        *   Insured Name: Rinki (Page 3 of 23)\n        *   UHID: Not explicitly stated for Mr. Gnanaprakash.S. The policy is for Rinki.\n        *   IP No: Not explicitly stated for Mr. Gnanaprakash.S.\n\n    **Discrepancy Identified**: The patient named in the claim documents (MR GNANAPRAKASH.S) does not match the \"Insured Name\" (Rinki) or \"Policyholder Name\" (Rinki) in the provided policy documents.\n\n**Conclusion for Phase 1**:\nA critical mismatch exists between the patient identified in the claim documents and the insured person listed in the policy. The claim documents pertain to \"MR GNANAPRAKASH.S\", whereas the policy (PolicyCopy_225002043900.pdf) is issued in the name of \"Rinki\" as both the policyholder and the insured.\n\n**Action Required**:\nPlease clarify the relationship between MR GNANAPRAKASH.S and the policyholder/insured Rinki. If MR GNANAPRAKASH.S is a dependent, please provide relevant documents (e.g., family floater policy details, dependent enrollment records) to establish their eligibility under this policy. Without this clarification, further processing of the claim is not possible as per the \"Identity & Eligibility Verification\" step.",
+    "amount_adjudication_agent_output": "**Claim Adjudication for CLAIMIDX0001**\n\n**1. Total Claimed Amount:**\n*   **Total Bill Amount:** INR 184,196.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 2)\n\n---\n\n**2. Phase 1: Room & Accommodation Analysis**\n\n*   **Room Category Availled:** ROOM-11 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 1 & 2)\n*   **Total Room Charges:** INR 36,000.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 2)\n*   **Policy Coverage for Room:** \"Room rent charges - Up to Single Private AC Room\" (Reference: PolicyCopy_225002043900.pdf, Page 5 & 18, Table of Benefits, In Patient Treatment).\n*   **Category Validation:** The hospital bill specifies \"ROOM-11\" but does not detail its category (e.g., if it is a Single Private AC Room).\n*   **Decision:** Due to the \"Zero Assumption Policy,\" we cannot determine if \"ROOM-11\" is compliant with the policy's \"Single Private AC Room\" limit.\n*   **Information Request:** Clarification is required on the specific category of \"ROOM-11\" to ascertain if it falls within the policy's eligible room type. If it exceeds the eligible room type, a proportionate deduction will be applied to all medical expenses. For this adjudication, we proceed *assuming compliance* but highlight the need for this crucial information.\n\n---\n\n**3. Phase 2: Policy Clause Application (Copay, Deductible, & Sublimits)**\n\n*   **Copay Application:**\n    *   **Policy Clause:** \"Voluntary Co-Payment (%): Not Applicable\" (Reference: PolicyCopy_225002043900.pdf, Page 3).\n    *   **Decision:** No co-payment is applicable to this claim.\n*   **Deductible Application:**\n    *   **Policy Clause:** \"Voluntary Deductible (₹): Not Applicable\" (Reference: PolicyCopy_225002043900.pdf, Page 3).\n    *   **Decision:** No deductible is applicable to this claim.\n*   **Sublimit Verification:**\n    *   **Policy Clause:** Specific sub-limits are mentioned for \"In-Patient Treatment for Surrogate Mother\" and \"In-Patient Treatment for Oocyte Donor\" (Reference: PolicyCopy_225002043900.pdf, Page 18).\n    *   **Diagnosis:** The final diagnosis includes \"ACUTE FEBRILE ILLNESS, TOXEMIA, LEFT LOWER LIMB CELLULITIS, RECENTLY DIAGNOSED TYPE II DM, LEFT ELBOW JOINT EFFUSION\" (Reference: FINAL BILL and DISCHAREGE.pdf, Page 3).\n    *   **Decision:** The diagnosed conditions do not fall under the specific sub-limits mentioned in the policy. Therefore, no treatment-specific sub-limits are applied.\n\n---\n\n**4. Phase 3: Line Item Billing Analysis & Non-Payables**\n\n*   **Non-Payable Identification:** Items falling under \"Personal comfort, cosmetics, convenience and hygiene related items and services\" (Reference: PolicyCopy_225002043900.pdf, Page 17, d.ii.26) are identified as non-payable.\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 6) - Reason: Hygiene/comfort item.\n    *   URINE CAN: INR 150.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 7) - Reason: Convenience item.\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 8) - Reason: Hygiene/comfort item.\n*   **Total Non-Payable Amount:** INR 195.00 + INR 150.00 + INR 195.00 = **INR 540.00**\n\n*   **Add-on Cover Consideration:**\n    *   **Policy Clause:** \"Claim Protector\" is an optional add-on that may cover typically non-payable items (Reference: PolicyCopy_225002043900.pdf, Page 12, ii.10).\n    *   **Policy Certificate:** \"Claim Protector\" is not listed as opted by the policyholder (Reference: PolicyCopy_225002043900.pdf, Page 4, Optional Details).\n    *   **Decision:** \"Claim Protector\" add-on is not applicable.\n\n---\n\n**5. Phase 4: Network & MOU Validation**\n\n*   No Hospital MOU (Memorandum of Understanding) was provided with the claim documents. Therefore, no MOU-related compliance checks or savings calculations can be performed. The billed amounts are considered as charged by the hospital.\n\n---\n\n**6. Final Verdict**\n\n*   **Total Claimed Amount:** INR 184,196.00\n*   **Total Non-Payable Amount:** INR 540.00\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Page 6) - Personal comfort/hygiene (Policy Exclusion d.ii.26)\n    *   URINE CAN: INR 150.00 (Page 7) - Personal convenience (Policy Exclusion d.ii.26)\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Page 8) - Personal comfort/hygiene (Policy Exclusion d.ii.26)\n*   **Total Payable Amount (Pending Room Category Clarification):** INR 184,196.00 - INR 540.00 = **INR 183,656.00**\n\n**Rationale for Deductions:**\nThe only deductions applied are for non-medical expenses related to personal comfort and hygiene, as explicitly excluded by policy clause d.ii.26. No co-payment or deductible is applicable. No sub-limits were triggered by the patient's diagnosis.\n\n**Information Required for Further Analysis:**\n*   **Room Category:** The specific category of \"ROOM-11\" (e.g., Single Private AC Room, Deluxe, Suite) needs to be confirmed to ensure compliance with policy terms \"Up to Single Private AC Room.\" If the availed room category exceeds the policy's eligibility, a proportionate deduction will be applied to all medical expenses, including the room rent, reducing the payable amount.",
+    "claim_summary_agent_output": "Here is the consolidated summary for Claim ID: CLAIMIDX0001.\n\n### Health Claim Adjudication Summary: CLAIMIDX0001\n\n---\n\n#### Section 1: Claim Overview\n\n| Detail               | Information                                                                   |\n| :------------------- | :---------------------------------------------------------------------------- |\n| **Claim ID**         | CLAIMIDX0001                                                                  |\n| **Patient Name**     | MR GNANAPRAKASH.S                                                             |\n| **UHID**             | KIL-26732                                                                     |\n| **Policy Number**    | 180001270400                                                                  |\n| **Policy Holder**    | Rinki                                                                         |\n| **Policy Tenure**    | 1 Year (Jan 08, 2025 to Jan 07, 2026)                                         |\n| **Hospital Name**    | Be Well Hospitals                                                             |\n| **Admission Dates**  | 07-08-2025 to 14-08-2025                                                      |\n\n---\n\n#### Section 2: Admissibility Verdict\n\n**Status: Not Admissible (Pending Clarification)**\n\n**Rationale:**\nA critical mismatch exists between the patient identified in the claim documents (MR GNANAPRAKASH.S) and the insured person listed in the policy (Rinki). The policy is issued in the name of \"Rinki\" as both the policyholder and the insured. Without clarification of Mr. Gnanaprakash.S's relationship to the policyholder and proof of eligibility under this policy, the claim cannot proceed for final adjudication.\n\n---\n\n#### Section 3: Financial Summary (Provisional)\n\n| Financial Component      | Amount (INR)     | Details                                                                            |\n| :----------------------- | :--------------- | :--------------------------------------------------------------------------------- |\n| **Total Claimed Amount** | 184,196.00       | As per FINAL BILL and DISCHAREGE.pdf                                               |\n| **Total Non-Payable**    | 540.00           | Exclusions per Policy Clause d.ii.26 (Personal comfort, convenience, hygiene items) |\n|   - UNDERPAD (DRY BED SHEET) | 390.00           | (INR 195.00 x 2)                                                                   |\n|   - URINE CAN            | 150.00           |                                                                                    |\n| **Total Payable Amount** | **183,656.00**   | (Total Claimed - Total Non-Payable)                                                |\n| **MOU Savings**          | Not Applicable   | No Hospital MOU provided                                                           |\n\n**Note:** The financial summary above is provisional and assumes compliance with the room category policy limit. It does not account for the primary admissibility issue. No co-payment, deductible, or sub-limits were applied.\n\n---\n\n#### Section 4: Critical Observations & Missing Information\n\n1.  **Patient-Policyholder Mismatch:** The most critical observation is the discrepancy between the patient name (MR GNANAPRAKASH.S) in the claim documents and the insured name (Rinki) in the policy.\n    *   **Action Required:** Clarification on the relationship between MR GNANAPRAKASH.S and Rinki, along with supporting documents (e.g., family floater policy details, dependent enrollment records), is essential to establish eligibility.\n\n2.  **Room Category Clarification:** The hospital bill lists \"ROOM-11\" at INR 36,000.00, but its specific category (e.g., Single Private AC Room) is not detailed. The policy limits room rent to \"Up to Single Private AC Room.\"\n    *   **Action Required:** Confirmation of the specific category of \"ROOM-11\" is required. If the availed room category exceeds policy eligibility, a proportionate deduction will be applied to all medical expenses, including room rent, which would reduce the payable amount.\n\n---\n\n**Conclusion:**\nThe claim is currently **Not Admissible** due to the unconfirmed patient eligibility. Once the patient's eligibility is established and dependent documents are provided, further processing will require clarification of the room category to finalize the payable amount."
+  },
+  "events": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Hello"
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-bb2a11b3-99ce-4b43-a553-c4a7c922620b",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "96709be6-1423-4cc8-8d06-a61ec213dc2f",
+      "timestamp": 1774354459.6421351
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Hello! I am your Chief Health Claims Advisor, ready to assist you with your cashless claim processing. To begin, please provide a valid Claim ID. For example, you can use CLAIMIDX0001, CLAIMIDX0002, or CLAIMIDX0003.",
+            "thoughtSignature": "CrYCAY89a1_iePUSSMnyZrX0d6Fqtv8sA23mpiX1HOzNnhxAoj0lBaMxEFWwxwA1MxF4dBCCJoFeUIs1_RvMQlpJaPOqq5mO3zGx4Ukj6SIqKFucBtfZInWyH3sMtEd_Tap9kWtc3pwJI1pQhgSWlJkATjUMBRl_nHGGKdflE7g7LY_-kOOoImkz0b6U1_wZumnB_UEwtIxIyM3h90It2z03MheAM8plNRFgmduIAJD6Ba6ZOEFZ4dsxXABR2AGaZKjuHE27w6r5_aUjyQnKR_3cL4vSB29AxOY2nwJ_pIpYAUW5umEoszi5qJAO9TEoBpSJbfyKbbDpqsuDtxcCkPln5mRcRvbUurhgnR8fm2gk0M_ZbD-bgdbHNb3gaSYu6RtLeBxgOwPMgOUi4U53T1rPAT_kn8NQjw=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 58,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 58
+          }
+        ],
+        "promptTokenCount": 759,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 759
+          }
+        ],
+        "thoughtsTokenCount": 54,
+        "totalTokenCount": 871,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.19938299573701004,
+      "invocationId": "e-bb2a11b3-99ce-4b43-a553-c4a7c922620b",
+      "author": "cashless_health_claim_advisor_workflow",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "6d12f768-f458-43f6-97fe-92eca79b84e3",
+      "timestamp": 1774354459.78401
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Pls process claim CLAIMIDX0001"
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-e7b38284-ce89-45d9-af5b-ec4d95f82ac2",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "2fcca956-1405-4b91-a36f-d41db5c614fe",
+      "timestamp": 1774354483.206892
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-08dd6b96-b6e4-4d1e-ad24-887bcc9d4844",
+              "args": {
+                "claimId": "CLAIMIDX0001"
+              },
+              "name": "getClaimsDetails"
+            },
+            "thoughtSignature": "Cv0CAY89a1-oTSxHan4djeCKUYqjjeImCg3DZZL4ALYxgLWFyt-TV7zUbc35lnEx0_arj7GUvu5JPlT-Z89jLjp5-AAR3FZBRdzlOo4f77q9TsciZU77bFr8F5ZItpgqQ83oAzjUbSFBgHLuCJthOVsJfemFKvOb1XB-ltcRolk0ddwptPmN0xar1wVUz5coDxTcqoEMqUe6NQ3lb6P4lN795uFe4Mgogi_f6bbv6jduojQe-q3PDDzuFYwU5MKOts5npt29QWbmBF1BbJc7F73jr_kR4Na8rqUg6sc3tdLGGdHovcKhh0Cahsx2gWEeZERWVnvno3WoUlZ5L52HnGDCZIjwN0UN-IVlEeLGFJU_05fAjI2t_1HIbjYyRp0zuN1P_cZBa-egdFuXLq3SVCbwBmg5RImRTdp2Z4p7Pj8D2csK2hseTvtGrVwUByo09_uyGbs_vh3PD83VCfBEWjQzuyTNmZgMjsgBWplpXG8TxkMUjsfYCAF3Si3ibElb"
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 11,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 11
+          }
+        ],
+        "promptTokenCount": 881,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 881
+          }
+        ],
+        "thoughtsTokenCount": 84,
+        "totalTokenCount": 976,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.48819455233487213,
+      "invocationId": "e-e7b38284-ce89-45d9-af5b-ec4d95f82ac2",
+      "author": "cashless_health_claim_advisor_workflow",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "671d6a01-9a4d-4442-be0b-8c187e3b7eb6",
+      "timestamp": 1774354483.2735958
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-08dd6b96-b6e4-4d1e-ad24-887bcc9d4844",
+              "name": "getClaimsDetails",
+              "response": {
+                "result": [
+                  {
+                    "name": "FINAL BILL and DISCHAREGE.pdf",
+                    "description": "File for claim CLAIMIDX0001",
+                    "mime_type": "application/pdf",
+                    "gcs_path": "gs://agentspace-demo-ds-bucket-proj-genai-1729/health_claim_documents/CLAIMIDX0001/FINAL BILL and DISCHAREGE.pdf"
+                  },
+                  {
+                    "name": "PolicyCopy_225002043900.pdf",
+                    "description": "File for claim CLAIMIDX0001",
+                    "mime_type": "application/pdf",
+                    "gcs_path": "gs://agentspace-demo-ds-bucket-proj-genai-1729/health_claim_documents/CLAIMIDX0001/PolicyCopy_225002043900.pdf"
+                  }
+                ]
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-e7b38284-ce89-45d9-af5b-ec4d95f82ac2",
+      "author": "cashless_health_claim_advisor_workflow",
+      "actions": {
+        "stateDelta": {
+          "active_policy_type": "Elevate",
+          "CLAIMIDX0001": [
+            {
+              "name": "FINAL BILL and DISCHAREGE.pdf",
+              "description": "File for claim CLAIMIDX0001",
+              "mime_type": "application/pdf",
+              "gcs_path": "gs://agentspace-demo-ds-bucket-proj-genai-1729/health_claim_documents/CLAIMIDX0001/FINAL BILL and DISCHAREGE.pdf"
+            },
+            {
+              "name": "PolicyCopy_225002043900.pdf",
+              "description": "File for claim CLAIMIDX0001",
+              "mime_type": "application/pdf",
+              "gcs_path": "gs://agentspace-demo-ds-bucket-proj-genai-1729/health_claim_documents/CLAIMIDX0001/PolicyCopy_225002043900.pdf"
+            }
+          ],
+          "active_case_id": "CLAIMIDX0001"
+        },
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "ab398f06-b49c-4778-bdaf-2192450ed767",
+      "timestamp": 1774354500.8989801
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "The claim CLAIMIDX0001 is currently pending processing. The available documents for this claim are \"FINAL BILL and DISCHAREGE.pdf\" and \"PolicyCopy_225002043900.pdf\".\n\nDo you wish to proceed with the processing of this claim?",
+            "thoughtSignature": "CscEAY89a194Og8x1SH6wr-XUYEgeVwNGVbMhsGV3O0G4P9owLPqzNo4iwVB50rEvBJ6Q40M2uX1LJFyXw3g7FIHoixx8TTV5atTJcHdAMR1SP13w5-l0MKdqghWX41jT-FVZIL46x893TuCdaoG1KQPVxs16rS-KB08oqVOuHWCtkZzG7aiN5ORNKwQNnKo_wEi3eYZoL3i0SPicbKgE79XERKF033q6oNYw8mrooWJum0BEs8Pquf_sCP1SynIXuxSdcYRslomlo__oVILn_stW3m-Q7Uf7ZX-dUv3EOO1wS8sfhPH4l9Bte81tHPQFWmcvU-LJW0UzNEV8748Q4S0Z1LqZ_WqbXfBnR4XMvXxl1mc95Ndbn_7zZMsIK36MVAkx4LdUgCejVFCALy6uuOsbLXUsHKpCLI-4VRCc17pwzTGFHKwWLL7Ox8GxmgVmXs-nWG904C30RywGVw5OmjJMCiGx-cenrrC_1xmm8VrxZVYhepYTyRwkaAtDRAyJphMrSFCisRd_0jmS809y5fgEhnJoqPspRmsHlVjrEOOT_FtwxfdDmF-4TNkXjMbKx03kJdSOoeD0i5u-KOIqVr2iQqFGKpCJajqI2Tf-6QUSf5Sf-HgfGTd92g_yzjiwXb2l04rxwMRpmPQG0MsiIvCtWHZEZPnrup20dCgVNYNaKP9tGEBEGUswlt0sTDPt14GtCxuRtzf3i_r1Ux8oekGy_4an3AgHhUc8HhwH3KJwcs3xY8h7X7pU-Z0v0LLi05noqO75AcW0g=="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 64,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 64
+          }
+        ],
+        "promptTokenCount": 1142,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1142
+          }
+        ],
+        "thoughtsTokenCount": 148,
+        "totalTokenCount": 1354,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.3766412138938904,
+      "invocationId": "e-e7b38284-ce89-45d9-af5b-ec4d95f82ac2",
+      "author": "cashless_health_claim_advisor_workflow",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "58f8e966-83e2-4ba1-9262-179b749c41c0",
+      "timestamp": 1774354501.263915
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "yes pls"
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-9ac3f12b-dfac-47dc-90d3-b3b071dc18d4",
+      "author": "user",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "8924d474-c85a-4137-ba17-2ae9e126f972",
+      "timestamp": 1774354552.2907789
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "functionCall": {
+              "id": "adk-95bd4a06-5746-45dc-bf39-4f3f2bbb79c5",
+              "args": {
+                "agent_name": "claims_processing_flow_agent"
+              },
+              "name": "transfer_to_agent"
+            },
+            "thoughtSignature": "CooCAY89a18xO-MaKi_o_LaWrAbMZDDinnTdfo0Mm83XwPTDSFUXzbQgUOqKm4mnxBVE2AaLH2O0Jd0uHlVT2KFaQ5wo6My0lx2ggW2S2TmKF9UN_tzEvRg7G4Lg7zJDyAS2cCTajHrO-Sspf5jl_1yr4JYuqIdv9dFDTrq6DB2QeYxuZd-fuCEBhHj3yaj851FC1baeJgn3ZcMP96GV3fqUgRRjPQKSFX6_7gmNao5Ri5JtUSK5_K0vq7k27oO78auM2h6xc65jCIp-VbK9mQklILU9QAAmNI6yFJSuowkW2onABaMSyoG2iy4pHJsGYGac_5dxNlDF-tieXzgA_Q9M-qMj1QKhF6PGxJE="
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 15,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 15
+          }
+        ],
+        "promptTokenCount": 1356,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1356
+          }
+        ],
+        "thoughtsTokenCount": 54,
+        "totalTokenCount": 1425,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.5292359352111816,
+      "invocationId": "e-9ac3f12b-dfac-47dc-90d3-b3b071dc18d4",
+      "author": "cashless_health_claim_advisor_workflow",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "longRunningToolIds": [],
+      "id": "4b1ecf27-7d93-43cc-a933-51215b57430c",
+      "timestamp": 1774354552.708836
+    },
+    {
+      "content": {
+        "parts": [
+          {
+            "functionResponse": {
+              "id": "adk-95bd4a06-5746-45dc-bf39-4f3f2bbb79c5",
+              "name": "transfer_to_agent",
+              "response": {
+                "result": null
+              }
+            }
+          }
+        ],
+        "role": "user"
+      },
+      "invocationId": "e-9ac3f12b-dfac-47dc-90d3-b3b071dc18d4",
+      "author": "cashless_health_claim_advisor_workflow",
+      "actions": {
+        "stateDelta": {},
+        "artifactDelta": {},
+        "transferToAgent": "claims_processing_flow_agent",
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "eed9cf1e-c5e2-4b12-86f8-19a376aa0243",
+      "timestamp": 1774354567.883936
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "**Phase 1: Identity & Eligibility Verification**\n\n1.  **Identify Matching**:\n    *   **Claim Documents (FINAL BILL and DISCHAREGE.pdf)**:\n        *   Patient Name: MR GNANAPRAKASH.S\n        *   UHID: KIL-26732\n        *   IP No: KIL-IP008735\n    *   **Policy Record (PolicyCopy_225002043900.pdf)**:\n        *   Policyholder Name: Rinki (Page 3 of 23)\n        *   Insured Name: Rinki (Page 3 of 23)\n        *   UHID: Not explicitly stated for Mr. Gnanaprakash.S. The policy is for Rinki.\n        *   IP No: Not explicitly stated for Mr. Gnanaprakash.S.\n\n    **Discrepancy Identified**: The patient named in the claim documents (MR GNANAPRAKASH.S) does not match the \"Insured Name\" (Rinki) or \"Policyholder Name\" (Rinki) in the provided policy documents.\n\n**Conclusion for Phase 1**:\nA critical mismatch exists between the patient identified in the claim documents and the insured person listed in the policy. The claim documents pertain to \"MR GNANAPRAKASH.S\", whereas the policy (PolicyCopy_225002043900.pdf) is issued in the name of \"Rinki\" as both the policyholder and the insured.\n\n**Action Required**:\nPlease clarify the relationship between MR GNANAPRAKASH.S and the policyholder/insured Rinki. If MR GNANAPRAKASH.S is a dependent, please provide relevant documents (e.g., family floater policy details, dependent enrollment records) to establish their eligibility under this policy. Without this clarification, further processing of the claim is not possible as per the \"Identity & Eligibility Verification\" step."
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 433,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 433
+          }
+        ],
+        "promptTokenCount": 9518,
+        "promptTokensDetails": [
+          {
+            "modality": "DOCUMENT",
+            "tokenCount": 8256
+          },
+          {
+            "modality": "TEXT",
+            "tokenCount": 1262
+          }
+        ],
+        "thoughtsTokenCount": 329,
+        "totalTokenCount": 10280,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.41470203003211603,
+      "invocationId": "e-9ac3f12b-dfac-47dc-90d3-b3b071dc18d4",
+      "author": "claim_admissibility_agent",
+      "actions": {
+        "stateDelta": {
+          "claim_admissibility_agent_output": "**Phase 1: Identity & Eligibility Verification**\n\n1.  **Identify Matching**:\n    *   **Claim Documents (FINAL BILL and DISCHAREGE.pdf)**:\n        *   Patient Name: MR GNANAPRAKASH.S\n        *   UHID: KIL-26732\n        *   IP No: KIL-IP008735\n    *   **Policy Record (PolicyCopy_225002043900.pdf)**:\n        *   Policyholder Name: Rinki (Page 3 of 23)\n        *   Insured Name: Rinki (Page 3 of 23)\n        *   UHID: Not explicitly stated for Mr. Gnanaprakash.S. The policy is for Rinki.\n        *   IP No: Not explicitly stated for Mr. Gnanaprakash.S.\n\n    **Discrepancy Identified**: The patient named in the claim documents (MR GNANAPRAKASH.S) does not match the \"Insured Name\" (Rinki) or \"Policyholder Name\" (Rinki) in the provided policy documents.\n\n**Conclusion for Phase 1**:\nA critical mismatch exists between the patient identified in the claim documents and the insured person listed in the policy. The claim documents pertain to \"MR GNANAPRAKASH.S\", whereas the policy (PolicyCopy_225002043900.pdf) is issued in the name of \"Rinki\" as both the policyholder and the insured.\n\n**Action Required**:\nPlease clarify the relationship between MR GNANAPRAKASH.S and the policyholder/insured Rinki. If MR GNANAPRAKASH.S is a dependent, please provide relevant documents (e.g., family floater policy details, dependent enrollment records) to establish their eligibility under this policy. Without this clarification, further processing of the claim is not possible as per the \"Identity & Eligibility Verification\" step."
+        },
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "branch": "claims_processing_core_agent.claim_admissibility_agent",
+      "id": "28673576-f0ee-4c81-a8a7-044605f8985b",
+      "timestamp": 1774354568.181679
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "**Claim Adjudication for CLAIMIDX0001**\n\n**1. Total Claimed Amount:**\n*   **Total Bill Amount:** INR 184,196.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 2)\n\n---\n\n**2. Phase 1: Room & Accommodation Analysis**\n\n*   **Room Category Availled:** ROOM-11 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 1 & 2)\n*   **Total Room Charges:** INR 36,000.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 2)\n*   **Policy Coverage for Room:** \"Room rent charges - Up to Single Private AC Room\" (Reference: PolicyCopy_225002043900.pdf, Page 5 & 18, Table of Benefits, In Patient Treatment).\n*   **Category Validation:** The hospital bill specifies \"ROOM-11\" but does not detail its category (e.g., if it is a Single Private AC Room).\n*   **Decision:** Due to the \"Zero Assumption Policy,\" we cannot determine if \"ROOM-11\" is compliant with the policy's \"Single Private AC Room\" limit.\n*   **Information Request:** Clarification is required on the specific category of \"ROOM-11\" to ascertain if it falls within the policy's eligible room type. If it exceeds the eligible room type, a proportionate deduction will be applied to all medical expenses. For this adjudication, we proceed *assuming compliance* but highlight the need for this crucial information.\n\n---\n\n**3. Phase 2: Policy Clause Application (Copay, Deductible, & Sublimits)**\n\n*   **Copay Application:**\n    *   **Policy Clause:** \"Voluntary Co-Payment (%): Not Applicable\" (Reference: PolicyCopy_225002043900.pdf, Page 3).\n    *   **Decision:** No co-payment is applicable to this claim.\n*   **Deductible Application:**\n    *   **Policy Clause:** \"Voluntary Deductible (₹): Not Applicable\" (Reference: PolicyCopy_225002043900.pdf, Page 3).\n    *   **Decision:** No deductible is applicable to this claim.\n*   **Sublimit Verification:**\n    *   **Policy Clause:** Specific sub-limits are mentioned for \"In-Patient Treatment for Surrogate Mother\" and \"In-Patient Treatment for Oocyte Donor\" (Reference: PolicyCopy_225002043900.pdf, Page 18).\n    *   **Diagnosis:** The final diagnosis includes \"ACUTE FEBRILE ILLNESS, TOXEMIA, LEFT LOWER LIMB CELLULITIS, RECENTLY DIAGNOSED TYPE II DM, LEFT ELBOW JOINT EFFUSION\" (Reference: FINAL BILL and DISCHAREGE.pdf, Page 3).\n    *   **Decision:** The diagnosed conditions do not fall under the specific sub-limits mentioned in the policy. Therefore, no treatment-specific sub-limits are applied.\n\n---\n\n**4. Phase 3: Line Item Billing Analysis & Non-Payables**\n\n*   **Non-Payable Identification:** Items falling under \"Personal comfort, cosmetics, convenience and hygiene related items and services\" (Reference: PolicyCopy_225002043900.pdf, Page 17, d.ii.26) are identified as non-payable.\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 6) - Reason: Hygiene/comfort item.\n    *   URINE CAN: INR 150.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 7) - Reason: Convenience item.\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 8) - Reason: Hygiene/comfort item.\n*   **Total Non-Payable Amount:** INR 195.00 + INR 150.00 + INR 195.00 = **INR 540.00**\n\n*   **Add-on Cover Consideration:**\n    *   **Policy Clause:** \"Claim Protector\" is an optional add-on that may cover typically non-payable items (Reference: PolicyCopy_225002043900.pdf, Page 12, ii.10).\n    *   **Policy Certificate:** \"Claim Protector\" is not listed as opted by the policyholder (Reference: PolicyCopy_225002043900.pdf, Page 4, Optional Details).\n    *   **Decision:** \"Claim Protector\" add-on is not applicable.\n\n---\n\n**5. Phase 4: Network & MOU Validation**\n\n*   No Hospital MOU (Memorandum of Understanding) was provided with the claim documents. Therefore, no MOU-related compliance checks or savings calculations can be performed. The billed amounts are considered as charged by the hospital.\n\n---\n\n**6. Final Verdict**\n\n*   **Total Claimed Amount:** INR 184,196.00\n*   **Total Non-Payable Amount:** INR 540.00\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Page 6) - Personal comfort/hygiene (Policy Exclusion d.ii.26)\n    *   URINE CAN: INR 150.00 (Page 7) - Personal convenience (Policy Exclusion d.ii.26)\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Page 8) - Personal comfort/hygiene (Policy Exclusion d.ii.26)\n*   **Total Payable Amount (Pending Room Category Clarification):** INR 184,196.00 - INR 540.00 = **INR 183,656.00**\n\n**Rationale for Deductions:**\nThe only deductions applied are for non-medical expenses related to personal comfort and hygiene, as explicitly excluded by policy clause d.ii.26. No co-payment or deductible is applicable. No sub-limits were triggered by the patient's diagnosis.\n\n**Information Required for Further Analysis:**\n*   **Room Category:** The specific category of \"ROOM-11\" (e.g., Single Private AC Room, Deluxe, Suite) needs to be confirmed to ensure compliance with policy terms \"Up to Single Private AC Room.\" If the availed room category exceeds the policy's eligibility, a proportionate deduction will be applied to all medical expenses, including the room rent, reducing the payable amount."
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 1512,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1512
+          }
+        ],
+        "promptTokenCount": 9520,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 1264
+          },
+          {
+            "modality": "DOCUMENT",
+            "tokenCount": 8256
+          }
+        ],
+        "thoughtsTokenCount": 4467,
+        "totalTokenCount": 15499,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.842214998114046,
+      "invocationId": "e-9ac3f12b-dfac-47dc-90d3-b3b071dc18d4",
+      "author": "amount_adjudication_agent",
+      "actions": {
+        "stateDelta": {
+          "amount_adjudication_agent_output": "**Claim Adjudication for CLAIMIDX0001**\n\n**1. Total Claimed Amount:**\n*   **Total Bill Amount:** INR 184,196.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 2)\n\n---\n\n**2. Phase 1: Room & Accommodation Analysis**\n\n*   **Room Category Availled:** ROOM-11 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 1 & 2)\n*   **Total Room Charges:** INR 36,000.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 2)\n*   **Policy Coverage for Room:** \"Room rent charges - Up to Single Private AC Room\" (Reference: PolicyCopy_225002043900.pdf, Page 5 & 18, Table of Benefits, In Patient Treatment).\n*   **Category Validation:** The hospital bill specifies \"ROOM-11\" but does not detail its category (e.g., if it is a Single Private AC Room).\n*   **Decision:** Due to the \"Zero Assumption Policy,\" we cannot determine if \"ROOM-11\" is compliant with the policy's \"Single Private AC Room\" limit.\n*   **Information Request:** Clarification is required on the specific category of \"ROOM-11\" to ascertain if it falls within the policy's eligible room type. If it exceeds the eligible room type, a proportionate deduction will be applied to all medical expenses. For this adjudication, we proceed *assuming compliance* but highlight the need for this crucial information.\n\n---\n\n**3. Phase 2: Policy Clause Application (Copay, Deductible, & Sublimits)**\n\n*   **Copay Application:**\n    *   **Policy Clause:** \"Voluntary Co-Payment (%): Not Applicable\" (Reference: PolicyCopy_225002043900.pdf, Page 3).\n    *   **Decision:** No co-payment is applicable to this claim.\n*   **Deductible Application:**\n    *   **Policy Clause:** \"Voluntary Deductible (₹): Not Applicable\" (Reference: PolicyCopy_225002043900.pdf, Page 3).\n    *   **Decision:** No deductible is applicable to this claim.\n*   **Sublimit Verification:**\n    *   **Policy Clause:** Specific sub-limits are mentioned for \"In-Patient Treatment for Surrogate Mother\" and \"In-Patient Treatment for Oocyte Donor\" (Reference: PolicyCopy_225002043900.pdf, Page 18).\n    *   **Diagnosis:** The final diagnosis includes \"ACUTE FEBRILE ILLNESS, TOXEMIA, LEFT LOWER LIMB CELLULITIS, RECENTLY DIAGNOSED TYPE II DM, LEFT ELBOW JOINT EFFUSION\" (Reference: FINAL BILL and DISCHAREGE.pdf, Page 3).\n    *   **Decision:** The diagnosed conditions do not fall under the specific sub-limits mentioned in the policy. Therefore, no treatment-specific sub-limits are applied.\n\n---\n\n**4. Phase 3: Line Item Billing Analysis & Non-Payables**\n\n*   **Non-Payable Identification:** Items falling under \"Personal comfort, cosmetics, convenience and hygiene related items and services\" (Reference: PolicyCopy_225002043900.pdf, Page 17, d.ii.26) are identified as non-payable.\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 6) - Reason: Hygiene/comfort item.\n    *   URINE CAN: INR 150.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 7) - Reason: Convenience item.\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Reference: FINAL BILL and DISCHAREGE.pdf, Page 8) - Reason: Hygiene/comfort item.\n*   **Total Non-Payable Amount:** INR 195.00 + INR 150.00 + INR 195.00 = **INR 540.00**\n\n*   **Add-on Cover Consideration:**\n    *   **Policy Clause:** \"Claim Protector\" is an optional add-on that may cover typically non-payable items (Reference: PolicyCopy_225002043900.pdf, Page 12, ii.10).\n    *   **Policy Certificate:** \"Claim Protector\" is not listed as opted by the policyholder (Reference: PolicyCopy_225002043900.pdf, Page 4, Optional Details).\n    *   **Decision:** \"Claim Protector\" add-on is not applicable.\n\n---\n\n**5. Phase 4: Network & MOU Validation**\n\n*   No Hospital MOU (Memorandum of Understanding) was provided with the claim documents. Therefore, no MOU-related compliance checks or savings calculations can be performed. The billed amounts are considered as charged by the hospital.\n\n---\n\n**6. Final Verdict**\n\n*   **Total Claimed Amount:** INR 184,196.00\n*   **Total Non-Payable Amount:** INR 540.00\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Page 6) - Personal comfort/hygiene (Policy Exclusion d.ii.26)\n    *   URINE CAN: INR 150.00 (Page 7) - Personal convenience (Policy Exclusion d.ii.26)\n    *   UNDERPAD (DRY BED SHEET): INR 195.00 (Page 8) - Personal comfort/hygiene (Policy Exclusion d.ii.26)\n*   **Total Payable Amount (Pending Room Category Clarification):** INR 184,196.00 - INR 540.00 = **INR 183,656.00**\n\n**Rationale for Deductions:**\nThe only deductions applied are for non-medical expenses related to personal comfort and hygiene, as explicitly excluded by policy clause d.ii.26. No co-payment or deductible is applicable. No sub-limits were triggered by the patient's diagnosis.\n\n**Information Required for Further Analysis:**\n*   **Room Category:** The specific category of \"ROOM-11\" (e.g., Single Private AC Room, Deluxe, Suite) needs to be confirmed to ensure compliance with policy terms \"Up to Single Private AC Room.\" If the availed room category exceeds the policy's eligibility, a proportionate deduction will be applied to all medical expenses, including the room rent, reducing the payable amount."
+        },
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "branch": "claims_processing_core_agent.amount_adjudication_agent",
+      "id": "ebf9a6f8-9c97-4d7e-a6c7-8851f5c528ef",
+      "timestamp": 1774354568.2515168
+    },
+    {
+      "modelVersion": "gemini-2.5-flash",
+      "content": {
+        "parts": [
+          {
+            "text": "Here is the consolidated summary for Claim ID: CLAIMIDX0001.\n\n### Health Claim Adjudication Summary: CLAIMIDX0001\n\n---\n\n#### Section 1: Claim Overview\n\n| Detail               | Information                                                                   |\n| :------------------- | :---------------------------------------------------------------------------- |\n| **Claim ID**         | CLAIMIDX0001                                                                  |\n| **Patient Name**     | MR GNANAPRAKASH.S                                                             |\n| **UHID**             | KIL-26732                                                                     |\n| **Policy Number**    | 180001270400                                                                  |\n| **Policy Holder**    | Rinki                                                                         |\n| **Policy Tenure**    | 1 Year (Jan 08, 2025 to Jan 07, 2026)                                         |\n| **Hospital Name**    | Be Well Hospitals                                                             |\n| **Admission Dates**  | 07-08-2025 to 14-08-2025                                                      |\n\n---\n\n#### Section 2: Admissibility Verdict\n\n**Status: Not Admissible (Pending Clarification)**\n\n**Rationale:**\nA critical mismatch exists between the patient identified in the claim documents (MR GNANAPRAKASH.S) and the insured person listed in the policy (Rinki). The policy is issued in the name of \"Rinki\" as both the policyholder and the insured. Without clarification of Mr. Gnanaprakash.S's relationship to the policyholder and proof of eligibility under this policy, the claim cannot proceed for final adjudication.\n\n---\n\n#### Section 3: Financial Summary (Provisional)\n\n| Financial Component      | Amount (INR)     | Details                                                                            |\n| :----------------------- | :--------------- | :--------------------------------------------------------------------------------- |\n| **Total Claimed Amount** | 184,196.00       | As per FINAL BILL and DISCHAREGE.pdf                                               |\n| **Total Non-Payable**    | 540.00           | Exclusions per Policy Clause d.ii.26 (Personal comfort, convenience, hygiene items) |\n|   - UNDERPAD (DRY BED SHEET) | 390.00           | (INR 195.00 x 2)                                                                   |\n|   - URINE CAN            | 150.00           |                                                                                    |\n| **Total Payable Amount** | **183,656.00**   | (Total Claimed - Total Non-Payable)                                                |\n| **MOU Savings**          | Not Applicable   | No Hospital MOU provided                                                           |\n\n**Note:** The financial summary above is provisional and assumes compliance with the room category policy limit. It does not account for the primary admissibility issue. No co-payment, deductible, or sub-limits were applied.\n\n---\n\n#### Section 4: Critical Observations & Missing Information\n\n1.  **Patient-Policyholder Mismatch:** The most critical observation is the discrepancy between the patient name (MR GNANAPRAKASH.S) in the claim documents and the insured name (Rinki) in the policy.\n    *   **Action Required:** Clarification on the relationship between MR GNANAPRAKASH.S and Rinki, along with supporting documents (e.g., family floater policy details, dependent enrollment records), is essential to establish eligibility.\n\n2.  **Room Category Clarification:** The hospital bill lists \"ROOM-11\" at INR 36,000.00, but its specific category (e.g., Single Private AC Room) is not detailed. The policy limits room rent to \"Up to Single Private AC Room.\"\n    *   **Action Required:** Confirmation of the specific category of \"ROOM-11\" is required. If the availed room category exceeds policy eligibility, a proportionate deduction will be applied to all medical expenses, including room rent, which would reduce the payable amount.\n\n---\n\n**Conclusion:**\nThe claim is currently **Not Admissible** due to the unconfirmed patient eligibility. Once the patient's eligibility is established and dependent documents are provided, further processing will require clarification of the room category to finalize the payable amount."
+          }
+        ],
+        "role": "model"
+      },
+      "finishReason": "STOP",
+      "usageMetadata": {
+        "candidatesTokenCount": 938,
+        "candidatesTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 938
+          }
+        ],
+        "promptTokenCount": 13192,
+        "promptTokensDetails": [
+          {
+            "modality": "TEXT",
+            "tokenCount": 4936
+          },
+          {
+            "modality": "DOCUMENT",
+            "tokenCount": 8256
+          }
+        ],
+        "thoughtsTokenCount": 419,
+        "totalTokenCount": 14549,
+        "trafficType": "ON_DEMAND"
+      },
+      "avgLogprobs": -0.2622135381962953,
+      "invocationId": "e-9ac3f12b-dfac-47dc-90d3-b3b071dc18d4",
+      "author": "claim_summary_agent",
+      "actions": {
+        "stateDelta": {
+          "claim_summary_agent_output": "Here is the consolidated summary for Claim ID: CLAIMIDX0001.\n\n### Health Claim Adjudication Summary: CLAIMIDX0001\n\n---\n\n#### Section 1: Claim Overview\n\n| Detail               | Information                                                                   |\n| :------------------- | :---------------------------------------------------------------------------- |\n| **Claim ID**         | CLAIMIDX0001                                                                  |\n| **Patient Name**     | MR GNANAPRAKASH.S                                                             |\n| **UHID**             | KIL-26732                                                                     |\n| **Policy Number**    | 180001270400                                                                  |\n| **Policy Holder**    | Rinki                                                                         |\n| **Policy Tenure**    | 1 Year (Jan 08, 2025 to Jan 07, 2026)                                         |\n| **Hospital Name**    | Be Well Hospitals                                                             |\n| **Admission Dates**  | 07-08-2025 to 14-08-2025                                                      |\n\n---\n\n#### Section 2: Admissibility Verdict\n\n**Status: Not Admissible (Pending Clarification)**\n\n**Rationale:**\nA critical mismatch exists between the patient identified in the claim documents (MR GNANAPRAKASH.S) and the insured person listed in the policy (Rinki). The policy is issued in the name of \"Rinki\" as both the policyholder and the insured. Without clarification of Mr. Gnanaprakash.S's relationship to the policyholder and proof of eligibility under this policy, the claim cannot proceed for final adjudication.\n\n---\n\n#### Section 3: Financial Summary (Provisional)\n\n| Financial Component      | Amount (INR)     | Details                                                                            |\n| :----------------------- | :--------------- | :--------------------------------------------------------------------------------- |\n| **Total Claimed Amount** | 184,196.00       | As per FINAL BILL and DISCHAREGE.pdf                                               |\n| **Total Non-Payable**    | 540.00           | Exclusions per Policy Clause d.ii.26 (Personal comfort, convenience, hygiene items) |\n|   - UNDERPAD (DRY BED SHEET) | 390.00           | (INR 195.00 x 2)                                                                   |\n|   - URINE CAN            | 150.00           |                                                                                    |\n| **Total Payable Amount** | **183,656.00**   | (Total Claimed - Total Non-Payable)                                                |\n| **MOU Savings**          | Not Applicable   | No Hospital MOU provided                                                           |\n\n**Note:** The financial summary above is provisional and assumes compliance with the room category policy limit. It does not account for the primary admissibility issue. No co-payment, deductible, or sub-limits were applied.\n\n---\n\n#### Section 4: Critical Observations & Missing Information\n\n1.  **Patient-Policyholder Mismatch:** The most critical observation is the discrepancy between the patient name (MR GNANAPRAKASH.S) in the claim documents and the insured name (Rinki) in the policy.\n    *   **Action Required:** Clarification on the relationship between MR GNANAPRAKASH.S and Rinki, along with supporting documents (e.g., family floater policy details, dependent enrollment records), is essential to establish eligibility.\n\n2.  **Room Category Clarification:** The hospital bill lists \"ROOM-11\" at INR 36,000.00, but its specific category (e.g., Single Private AC Room) is not detailed. The policy limits room rent to \"Up to Single Private AC Room.\"\n    *   **Action Required:** Confirmation of the specific category of \"ROOM-11\" is required. If the availed room category exceeds policy eligibility, a proportionate deduction will be applied to all medical expenses, including room rent, which would reduce the payable amount.\n\n---\n\n**Conclusion:**\nThe claim is currently **Not Admissible** due to the unconfirmed patient eligibility. Once the patient's eligibility is established and dependent documents are provided, further processing will require clarification of the room category to finalize the payable amount."
+        },
+        "artifactDelta": {},
+        "requestedAuthConfigs": {},
+        "requestedToolConfirmations": {}
+      },
+      "id": "9f04c184-fdac-42f3-ba9e-d91279a4e165",
+      "timestamp": 1774354610.190737
+    }
+  ],
+  "lastUpdateTime": 1774354610.190737
+}
