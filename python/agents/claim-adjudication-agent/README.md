@@ -30,7 +30,7 @@ This workflow utilizes a combination of parallel and sequential execution patter
 
 ### 1. Prerequisites
 
-*   **Python 3.11+**
+*   **Python 3.10+**
 *   **uv**: For dependency management.
     ```bash
     curl -LsSf https://astral.sh/uv/install.sh | sh
@@ -118,6 +118,26 @@ uv run pytest eval/test_eval.py
 ```
 
 You can also run all tests at once with `uv run pytest`.
+
+## Customization
+
+- **Modify Prompts**: Update `claim_adjudication_agent/prompt.py` or the sub-agent prompts.
+- **Add Tools**: Extend the capability by adding new functions to `tools/tools.py`.
+- **Callback Logic**: Adjust state management or logging in `tools/tools.py`.
+
+## Areas of Enhancement
+
+- **Document Validation Agent**: Implement an initial validation step to verify document completeness and legibility before the main adjudication flow begins.
+- **On-Demand Retrieval**: Transition from block storage (GCS) to fetching documents via a backend API server on demand to improve scalability and security.
+s://github.com/astral-sh/uv) installed, you can create and set up your project with a single command:
+```bash
+uvx agent-starter-pack create my-claim-adjudication-agent -a adk@claim-adjudication-agent
+```
+This command handles creating the project without needing to pre-install the package into a virtual environment.
+
+</details>
+
+The starter pack will prompt you to select deployment options and provides additional production-ready features including automated CI/CD deployment scripts.
 
 ## Customization
 
