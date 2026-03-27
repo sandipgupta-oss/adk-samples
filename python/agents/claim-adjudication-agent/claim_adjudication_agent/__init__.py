@@ -1,3 +1,5 @@
+from . import agent
+
 import os
 
 import google.auth
@@ -11,5 +13,3 @@ os.environ.setdefault(
     "CLAIM_DOCUMENTS_BUCKET", "agentspace-demo-ds-bucket-proj-genai-1729"
 )
 os.environ.setdefault("CLAIM_DOCUMENTS_BUCKET_FOLDER", "health_claim_documents")
-
-from . import agent
