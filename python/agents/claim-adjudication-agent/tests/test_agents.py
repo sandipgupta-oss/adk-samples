@@ -41,7 +41,9 @@ async def test_health_claim_workflow():
     user_input = "Adjudicate the claim ID CLAIMIDX0001"
     app_name = "claim-adjudication-agent"
 
-    runner = InMemoryRunner(agent=cashless_health_claim_advisor_workflow, app_name=app_name)
+    runner = InMemoryRunner(
+        agent=cashless_health_claim_advisor_workflow, app_name=app_name
+    )
     
     session = await runner.session_service.create_session(
         app_name=runner.app_name, user_id="test_user"

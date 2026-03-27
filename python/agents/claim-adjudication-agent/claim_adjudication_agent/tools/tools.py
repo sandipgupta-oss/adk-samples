@@ -57,9 +57,14 @@ async def before_model_callback(
             # 2. Get the document list for that case
             document_list = callback_context.state.get(active_case_id)
             
-            if document_list and isinstance(document_list, list) and len(document_list) > 0:
+            if (
+                document_list
+                and isinstance(document_list, list)
+                and len(document_list) > 0
+            ):
                 logger.info(
-                    f"[Callback: before_model_callback] Found {len(document_list)} documents for attachment."
+                    f"[Callback: before_model_callback] Found {len(document_list)} "
+                    f"documents for attachment."
                 )
 
                 # Ensure we have a valid user message to attach files to
@@ -73,10 +78,12 @@ async def before_model_callback(
                         mime_type = doc.get('mime_type')
 
                         if gcs_path and mime_type:
-                            # 4. Check for duplicates to prevent re-attaching if callback runs twice
+                            # 4. Check for duplicates to prevent re-attaching if
+                            # callback runs twice
                             is_duplicate = False
                             for part in user_message_parts:
-                                # Check if this specific URI is already in the message parts
+                                # Check if this specific URI is already in the
+                                # message parts
                                 if (
                                     hasattr(part, "file_data")
                                     and part.file_data
@@ -87,7 +94,8 @@ async def before_model_callback(
                             
                             if not is_duplicate:
                                 logger.info(
-                                    f"[Callback] Attaching file: {gcs_path} (MIME: {mime_type})"
+                                    f"[Callback] Attaching file: {gcs_path} "
+                                    f"(MIME: {mime_type})"
                                 )
                                 file_part = types.Part.from_uri(
                                     file_uri=gcs_path,
@@ -96,19 +104,23 @@ async def before_model_callback(
                                 user_message_parts.append(file_part)
                             else:
                                 logger.error(
-                                    f"[Callback] Skipping duplicate attachment: {gcs_path}"
+                                    f"[Callback] Skipping duplicate attachment: "
+                                    f"{gcs_path}"
                                 )
                         else:
                             logger.error(
-                                f"[Callback] Skipping document with missing path/mime: {doc.get('name', 'UNKNOWN')}"
+                                f"[Callback] Skipping document with missing path/mime: "
+                                f"{doc.get('name', 'UNKNOWN')}"
                             )
                 else:
                     logger.error(
-                        "[Callback: before_model_callback] No user message found in request to append files to."
+                        "[Callback: before_model_callback] No user message found in "
+                        "request to append files to."
                     )
             else:
                 logger.error(
-                    f"[Callback: before_model_callback] No document list found for key: {active_case_id}"
+                    f"[Callback: before_model_callback] No document list found for "
+                    f"key: {active_case_id}"
                 )
         else:
             logger.error(
@@ -134,7 +146,8 @@ async def after_tool_callback(
     agent_name = tool_context.agent_name
     tool_name = tool.name
     logger.info(
-        f"[Callback: after_tool_callback] After tool call for tool '{tool_name}' in agent '{agent_name}'"
+        f"[Callback: after_tool_callback] After tool call for tool "
+        f"'{tool_name}' in agent '{agent_name}'"
     )
     logger.info(f"[Callback: after_tool_callback] Args used: {args}")
     logger.info(
@@ -156,7 +169,8 @@ async def after_tool_callback(
             # 3. Save the entire list (the tool_response) to state
             tool_context.state[case_id] = tool_response                
             logger.info(
-                f"[Callback: after_tool_callback] Saved extracted data to state with key: '{case_id}'"
+                f"[Callback: after_tool_callback] Saved extracted data to state "
+                f"with key: '{case_id}'"
             )
 
             # 4. Set the active case
@@ -173,7 +187,8 @@ async def after_tool_callback(
         
         elif not case_id:
             logger.info(
-                "[Callback: after_tool_callback] ERROR: Could not find 'claim_id' in args."
+                "[Callback: after_tool_callback] ERROR: Could not find "
+                "'claim_id' in args."
             )
         
         elif not isinstance(tool_response, list):
@@ -192,7 +207,9 @@ async def after_tool_callback(
     )
     return None
 
-def get_claims_details(claim_id: str, tool_context: ToolContext) -> List[Dict[str, str]]:
+def get_claims_details(
+    claim_id: str, tool_context: ToolContext
+) -> List[Dict[str, str]]:
     logger.info(f">>> Tool: 'get_claims_details' called for Claim ID '{claim_id}'")
     
     results: List[Dict[str, str]] = []

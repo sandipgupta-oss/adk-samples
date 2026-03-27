@@ -1,0 +1,97 @@
+Setup
+echo $GOOGLE_APPLICATION_CREDENTIALS
+unset GOOGLE_APPLICATION_CREDENTIALS
+export GOOGLE_APPLICATION_CREDENTIALS=~/projects/sa-proj-genai.json
+#source ~/projects/adk2/.adkenv/bin/activate
+
+export PATH=/Users/sandipgupta/google-cloud-sdk/bin:$PATH
+
+gcloud auth application-default login
+gcloud auth application-default print-access-token
+
+gcloud config set project proj-genai
+gcloud auth application-default set-quota-project proj-genai
+gcloud config list
+gcloud config unset billing/quota_project
+
+1. Environment & Dependencies
+Use these to set up or update your Python environment using uv.
+
+bash
+# Initial sync of all dependencies
+uv sync
+# Sync development dependencies (required for testing/evaluation)
+uv sync --dev
+# Update lockfile to latest versions
+uv lock --upgrade
+2. Google Cloud Authentication
+Run these if you encounter any "RefreshError" or "Unauthorized" issues with the Vertex AI or GCS tools.
+
+bash
+# Provide Application Default Credentials (ADC)
+gcloud auth application-default login
+# Set the quota project for API billing
+gcloud auth application-default set-quota-project proj-genai
+3. Running the Agent
+You must run these through uv run to ensure the agent uses the local virtual environment.
+
+bash
+# Start the Web Interface (Localhost UI)
+uv run adk web
+# Run the agent via CLI for quick testing
+uv run adk run claim_adjudication_agent
+4. Testing & Evaluation
+Use these to verify the agent's logic and performance.
+
+bash
+# Run all tests (Functional + Evaluation)
+uv run pytest
+# Run functional agent tests only
+uv run pytest claim_adjudication_agent/tests/test_agents.py
+# Run the automated evaluation suite only
+uv run pytest claim_adjudication_agent/eval/test_eval.py
+5. Deployment (Optional)
+If you decide to push the agent to Vertex AI Agent Engine.
+
+bash
+# Sync deployment group
+uv sync --group deployment
+# Create the remote agent
+uv run deployment/deploy.py --create
+
+
+uv run claim_adjudication_agent/deployment/test_deployment.py \
+    --resource_id=YOUR_RESOURCE_ID_HERE \
+    --user_id=test_user
+
+uv run claim_adjudication_agent/deployment/deploy.py --list
+uv run claim_adjudication_agent/deployment/deploy.py --delete --resource_id=6698366123655561216
+python3 deployment/deploy.py --delete --resource_id=6698366123655561216
+python3 deployment/deploy.py --create
+python3 deployment/test_deployment.py --resource_id=6698366123655561216 --user_id=test_user
+
+//ADK Agent Garden
+Doc: https://docs.google.com/document/d/1UMs2qJzvtJgMXL52lt3Kd9hGfKGXYFoRnogDR0wc1Pw/edit?tab=t.tx4ja4zwxvd
+
+
+https://docs.google.com/document/d/14ZvX_pPLNlCYFJqmnzLZnlJYJqpNMpy06k9Nz2UPLoU/edit?tab=t.0
+https://g3doc.corp.google.com/cloud/ml/applications/vision/model_garden/g3doc/adk_samples_integration.md?cl=head
+https://g3doc.corp.google.com/cloud/ml/applications/vision/model_garden/g3doc/onboard_agents_to_agent_garden.md?cl=head#enable-one-click-deployment-recommended
+
+uvx agent-starter-pack create claims_adjudication_agent -a local@python/agents/claim_adjudication_agent --auto-approve -o target
+
+//To resume this session: gemini --resume 27415fb7-8d07-4c03-b5c5-8522390e4e97 
+
+//Gemini CLI
+Your task is to adapt an ADK agent for integration with the Agent Starter Pack.
+
+Use the changes in the pull request at https://github.com/google/adk-samples/pull/351 as a reference. Apply the same pattern to the agent located in the python/agents/claim-adjudication-agent directory. ( You can use `curl -L https://github.com/google/adk-samples/pull/351.diff` to obtain those changes )
+
+Perform the following actions in sequence:
+Modify pyproject.toml:
+- Convert all dependencies from the Poetry format to the uv standard using [project] and [project.optional-dependencies] and relative groups.
+- Add the [tool.agent-starter-pack] metadata section
+- Add agent-starter-pack as dev dependency.
+Update Agent Source Code: Add the flexible authentication block to the main agent Python file.
+Update Documentation: In README.md, replace any existing development setup instructions with uv sync --dev and add the "Alternative: Using Agent Starter Pack" section.
+Generate Lock File: After modifying the files, navigate to the agent's directory and execute the command `uv lock` to generate the uv.lock file.

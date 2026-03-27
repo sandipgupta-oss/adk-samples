@@ -18,7 +18,8 @@ claims_processing_core_agent = ParallelAgent(
     name="claims_processing_core_agent",
     description=(
         "Facilitates the concurrent execution of core claim evaluation modules, "
-        "including admissibility verification and financial adjudication, to ensure efficient processing."
+        "including admissibility verification and financial adjudication, to ensure "
+        "efficient processing."
     ),
     sub_agents=[claim_admissibility_agent, amount_adjudication_agent],
 )
@@ -37,8 +38,8 @@ cashless_health_claim_advisor_workflow = LlmAgent(
     model=GEMINI_FLASH,
     description=(
         "The master orchestration agent responsible for the end-to-end management of "
-        "the cashless health insurance claim lifecycle, streamlining document retrieval, "
-        "verification, and adjudication."
+        "the cashless health insurance claim lifecycle, streamlining document "
+        "retrieval, verification, and adjudication."
     ),
     instruction=CASHLESS_HEALTH_CLAIM_ADVISOR_WORKFLOW_PROMPT,
     sub_agents = [claims_processing_flow_agent],
