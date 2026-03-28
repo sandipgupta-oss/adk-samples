@@ -5,7 +5,7 @@ description = "AI-driven agent designed to facilitate health insurance claim pro
 authors = [{ name = "Author", email = "author@example.com" }]
 license = "Apache-2.0"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10,<3.13"
 
 dependencies = [
     "google-cloud-aiplatform[adk,agent-engines]>=1.142.0",

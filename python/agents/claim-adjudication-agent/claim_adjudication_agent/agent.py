@@ -1,5 +1,6 @@
+"""Health claim advisor: facilitate health insurance claim processing."""
+
 import os
-from dotenv import load_dotenv
 
 from google.adk.agents import LlmAgent, ParallelAgent, SequentialAgent
 from google.adk.tools.function_tool import FunctionTool
@@ -10,7 +11,6 @@ from .sub_agents.claim_admissibility.agent import claim_admissibility_agent
 from .sub_agents.summary_writer.agent import claim_summary_agent
 from .tools.tools import after_tool_callback, get_claims_details
 
-load_dotenv()
 
 GEMINI_FLASH = os.getenv("GEMINI_FLASH", "gemini-2.5-flash")
 
