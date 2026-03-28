@@ -19,9 +19,9 @@ periods, and medical terminology.
 1. **Identify Matching**: Verify that the UHID and Patient Name in the claim \
 documents exactly match those in the policy record.
 2. **Tenure & Continuity**:
-   - Calculate total association with the insurer (IL) in years based on the \
-"IL Date of Joining."
-   - **Caution**: Distinguish clearly between "IL Date of Joining" and "Porting Date."
+   - Calculate total association with the insurer in years based on the \
+"Date of Joining."
+   - **Caution**: Distinguish clearly between "Date of Joining" and "Porting Date."
    - **Portability Check**: Determine if this is a portability case (where Date \
 of Joining and Risk Start Date differ). Do not confuse this with a standard \
 renewal. Highlight any ambiguity.
