@@ -26,7 +26,9 @@ FLAGS = flags.FLAGS
 flags.DEFINE_string("project_id", None, "GCP project ID.")
 flags.DEFINE_string("location", None, "GCP location.")
 flags.DEFINE_string(
-    "resource_id", None, "ReasoningEngine resource ID (returned after deployment)."
+    "resource_id",
+    None,
+    "ReasoningEngine resource ID (returned after deployment).",
 )
 flags.DEFINE_string("user_id", None, "User ID for the session.")
 flags.mark_flag_as_required("resource_id")
@@ -39,7 +41,9 @@ def main(argv: list[str]) -> None:
 
     # Priority: Flag -> Env -> None
     project_id = FLAGS.project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
-    location = FLAGS.location or os.getenv("GOOGLE_CLOUD_LOCATION") or "us-central1"
+    location = (
+        FLAGS.location or os.getenv("GOOGLE_CLOUD_LOCATION") or "us-central1"
+    )
     bucket = os.getenv("CLAIM_DOCUMENTS_BUCKET")
 
     if not project_id:
@@ -56,14 +60,14 @@ def main(argv: list[str]) -> None:
     try:
         agent = agent_engines.get(FLAGS.resource_id)
         print(f"Successfully connected to agent: {agent.display_name}")
-        
+
         # Create a session
         session = agent.create_session(user_id=FLAGS.user_id)
         print(f"Session created: {session['id']}")
-        
+
         print("\n--- Remote Agent Chat ---")
         print("Type 'quit' or 'exit' to stop.")
-        
+
         while True:
             user_input = input("\nYou: ")
             if user_input.lower() in ["quit", "exit"]:
@@ -73,19 +77,19 @@ def main(argv: list[str]) -> None:
             for event in agent.stream_query(
                 user_id=FLAGS.user_id,
                 session_id=session["id"],
-                message=user_input
+                message=user_input,
             ):
                 if "content" in event:
                     if "parts" in event["content"]:
                         for part in event["content"]["parts"]:
                             if "text" in part:
                                 print(part["text"], end="", flush=True)
-            print() # New line after the stream
-            
+            print()  # New line after the stream
+
         # Cleanup session
         agent.delete_session(user_id=FLAGS.user_id, session_id=session["id"])
         print(f"\nSession {session['id']} deleted.")
-        
+
     except Exception as e:
         print(f"Error during remote execution: {e}")
 

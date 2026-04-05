@@ -15,7 +15,6 @@
 """Basic evaluation for Health Claim Adjudication Agent"""
 
 import pathlib
-import os
 
 import dotenv
 import pytest
@@ -35,10 +34,10 @@ async def test_claim_adjudication_eval():
     """Test the health claim agent's ability to adjudicate specific cases."""
     # The name here must match the agent name in agent.py
     agent_name = "cashless_health_claim_advisor_workflow"
-    
+
     # Path to the data directory containing the evaluation sets
     data_path = str(pathlib.Path(__file__).parent / "data")
-    
+
     await AgentEvaluator.evaluate(
         agent_name,
         data_path,

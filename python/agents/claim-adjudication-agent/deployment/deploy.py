@@ -56,7 +56,7 @@ def create() -> None:
             "absl-py>=2.1.0",
             "pandas>=2.2.3,<3.0.0",
         ],
-        extra_packages=["./claim_adjudication_agent"]
+        extra_packages=["./claim_adjudication_agent"],
     )
     print(f"Created remote agent: {remote_agent.resource_name}")
 
@@ -88,7 +88,9 @@ def main(argv: list[str]) -> None:
 
     # Priority: Flag -> Env -> None
     project_id = FLAGS.project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
-    location = FLAGS.location or os.getenv("GOOGLE_CLOUD_LOCATION") or "us-central1"
+    location = (
+        FLAGS.location or os.getenv("GOOGLE_CLOUD_LOCATION") or "us-central1"
+    )
     # Using the existing bucket from .env
     bucket = FLAGS.bucket or os.getenv("AE_DEPLOYMENT_BUCKET")
 
@@ -97,10 +99,14 @@ def main(argv: list[str]) -> None:
     print(f"STAGING BUCKET: {bucket}")
 
     if not project_id:
-        print("Error: Missing GOOGLE_CLOUD_PROJECT. Use --project_id or set in .env")
+        print(
+            "Error: Missing GOOGLE_CLOUD_PROJECT. Use --project_id or set in .env"
+        )
         return
     if not bucket:
-        print("Error: Missing CLAIM_DOCUMENTS_BUCKET. Use --bucket or set in .env")
+        print(
+            "Error: Missing CLAIM_DOCUMENTS_BUCKET. Use --bucket or set in .env"
+        )
         return
 
     vertexai.init(

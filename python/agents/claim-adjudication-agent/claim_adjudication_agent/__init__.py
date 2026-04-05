@@ -4,6 +4,8 @@ import os
 
 import google.auth
 
+from . import agent
+
 _, project_id = google.auth.default()
 os.environ.setdefault("GOOGLE_CLOUD_PROJECT", project_id)
 os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "global")
@@ -13,5 +15,3 @@ os.environ.setdefault(
     "CLAIM_DOCUMENTS_BUCKET", "agentspace-demo-ds-bucket-proj-genai-1729"
 )
 os.environ.setdefault("CLAIM_DOCUMENTS_BUCKET_FOLDER", "health_claim_documents")
-
-from . import agent

@@ -11,7 +11,6 @@ from .sub_agents.claim_admissibility.agent import claim_admissibility_agent
 from .sub_agents.summary_writer.agent import claim_summary_agent
 from .tools.tools import after_tool_callback, get_claims_details
 
-
 GEMINI_FLASH = os.getenv("GEMINI_FLASH", "gemini-2.5-flash")
 
 claims_processing_core_agent = ParallelAgent(
@@ -42,7 +41,7 @@ cashless_health_claim_advisor_workflow = LlmAgent(
         "retrieval, verification, and adjudication."
     ),
     instruction=CASHLESS_HEALTH_CLAIM_ADVISOR_WORKFLOW_PROMPT,
-    sub_agents = [claims_processing_flow_agent],
+    sub_agents=[claims_processing_flow_agent],
     tools=[FunctionTool(get_claims_details)],
     after_tool_callback=after_tool_callback,
 )

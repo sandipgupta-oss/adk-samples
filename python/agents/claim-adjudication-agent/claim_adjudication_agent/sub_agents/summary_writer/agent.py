@@ -14,7 +14,7 @@ claim_summary_agent = LlmAgent(
         "Synthesizes admissibility findings and financial adjudication data into a "
         "structured, comprehensive health claim summary report."
     ),
-    instruction= SUMMARY_WRITER_AGENT_PROMPT,
-    output_key = 'claim_summary_agent_output',
-    before_model_callback=before_model_callback,     
+    instruction=SUMMARY_WRITER_AGENT_PROMPT,
+    output_key="claim_summary_agent_output",
+    before_model_callback=before_model_callback,
 )

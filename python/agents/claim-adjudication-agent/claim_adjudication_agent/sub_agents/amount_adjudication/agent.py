@@ -1,7 +1,9 @@
 import os
+
 from google.adk.agents import LlmAgent
-from .prompt import AMOUNT_ADJUDICATION_AGENT_PROMPT
+
 from ...tools.tools import before_model_callback
+from .prompt import AMOUNT_ADJUDICATION_AGENT_PROMPT
 
 GEMINI_FLASH = os.getenv("GEMINI_FLASH", "gemini-2.5-flash")
 
@@ -13,7 +15,7 @@ amount_adjudication_agent = LlmAgent(
         "policy terms, co-payments, deductibles, and hospital MOUs."
     ),
     instruction=AMOUNT_ADJUDICATION_AGENT_PROMPT,
-    output_key = 'amount_adjudication_agent_output',
+    output_key="amount_adjudication_agent_output",
     before_model_callback=before_model_callback,
-    tools=[]
+    tools=[],
 )

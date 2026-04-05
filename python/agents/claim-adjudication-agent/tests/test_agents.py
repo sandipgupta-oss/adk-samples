@@ -14,15 +14,15 @@
 
 """Test cases for the Health Claim Adjudication Agent."""
 
-import textwrap
-import os
 
 import dotenv
 import pytest
 from google.adk.runners import InMemoryRunner
 from google.genai import types
 
-from claim_adjudication_agent.agent import cashless_health_claim_advisor_workflow
+from claim_adjudication_agent.agent import (
+    cashless_health_claim_advisor_workflow,
+)
 
 pytest_plugins = ("pytest_asyncio",)
 
@@ -36,7 +36,7 @@ def load_env():
 @pytest.mark.asyncio
 async def test_health_claim_workflow():
     """Runs the workflow on a sample claim ID and expects a summary response."""
-    
+
     # Simple input to trigger the workflow
     user_input = "Adjudicate the claim ID CLAIMIDX0001"
     app_name = "claim-adjudication-agent"
@@ -44,14 +44,14 @@ async def test_health_claim_workflow():
     runner = InMemoryRunner(
         agent=cashless_health_claim_advisor_workflow, app_name=app_name
     )
-    
+
     session = await runner.session_service.create_session(
         app_name=runner.app_name, user_id="test_user"
     )
-    
+
     content = types.Content(parts=[types.Part(text=user_input)])
     response = ""
-    
+
     # Execute the workflow
     async for event in runner.run_async(
         user_id=session.user_id,
@@ -59,13 +59,17 @@ async def test_health_claim_workflow():
         new_message=content,
     ):
         print(f"Event: {event}")
-        if event.content and event.content.parts and event.content.parts[0].text:
+        if (
+            event.content
+            and event.content.parts
+            and event.content.parts[0].text
+        ):
             response += event.content.parts[0].text
 
     # Basic assertions to ensure the agent produced meaningful output
     # We expect the summary to mention adjudication or status
     response_lower = response.lower()
-    
+
     # Note: These keywords depend on the actual agent prompts and tool outputs
     keywords = ["claim", "adjudication", "summary", "status"]
     assert any(keyword in response_lower for keyword in keywords)
