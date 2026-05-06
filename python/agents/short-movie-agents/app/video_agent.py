@@ -30,7 +30,7 @@ logger.setLevel(logging.DEBUG)
 
 # Configuration constants
 MODEL = "gemini-2.5-flash"
-VIDEO_MODEL = "veo-3.0-generate-preview"
+VIDEO_MODEL = "veo-3.1-generate-001"
 VIDEO_MODEL_LOCATION = "us-central1"
 DESCRIPTION = "Agent responsible for creating videos based on a screenplay and storyboards"
 ASPECT_RATIO = "16:9"

@@ -35,29 +35,21 @@ from googleapiclient.discovery import build
 from .utils import logger
 
 # --- Environment Variables ---
-AUTH_ID = os.getenv("AUTH_ID")
-MODE = os.getenv("MODE")
+AUTH_ID = os.getenv(
+    "AUTH_ID",
+    f"{os.getenv('GOOGLE_CLOUD_PROJECT')}-brand-aligner-agent-oauth-id",
+)
+MODE = os.getenv("MODE", "production")
 
-OAUTH_TOKEN_URI = os.getenv("OAUTH_TOKEN_URI")
-OAUTH_AUTH_URI_BASE = os.getenv("OAUTH_AUTH_URI_BASE")
+OAUTH_TOKEN_URI = os.getenv(
+    "OAUTH_TOKEN_URI", "https://oauth2.googleapis.com/token"
+)
+OAUTH_AUTH_URI_BASE = os.getenv(
+    "OAUTH_AUTH_URI_BASE", "https://accounts.google.com/o/oauth2/v2/auth"
+)
 
-OAUTH_CLIENT_ID = os.getenv("OAUTH_CLIENT_ID")
-OAUTH_CLIENT_SECRET = os.getenv("OAUTH_CLIENT_SECRET")
-
-# --- Auth Initialization ---
-if not all(
-    [
-        AUTH_ID,
-        MODE,
-        OAUTH_CLIENT_ID,
-        OAUTH_CLIENT_SECRET,
-        OAUTH_TOKEN_URI,
-        OAUTH_AUTH_URI_BASE,
-    ]
-):
-    raise OSError(
-        "Required environment variables for auth are not set. Please set AUTH_ID, MODE, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_TOKEN_URI and OAUTH_AUTH_URI_BASE."
-    )
+OAUTH_CLIENT_ID = os.getenv("OAUTH_CLIENT_ID", "")
+OAUTH_CLIENT_SECRET = os.getenv("OAUTH_CLIENT_SECRET", "")
 
 # --- Auth Configuration - relevant only for ADK ---
 # --- Token retrieval is managed directly by Gemini Enterprise as part of agent registration ---

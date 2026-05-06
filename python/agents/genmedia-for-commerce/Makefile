@@ -11,12 +11,20 @@ install:
 	@command -v g++ >/dev/null 2>&1 || { echo "Installing build tools (g++)..."; apt-get update -qq && apt-get install -y -qq build-essential g++ > /dev/null 2>&1 || true; }
 	uv sync
 
+# Sync the root config.env into the package directory.
+# The runtime loads genmedia4commerce/config.env (the package-internal one) because
+# at deploy time only the package directory ships. The root config.env is the
+# user-facing source of truth; the package one is a build artifact (gitignored).
+sync-config:
+	@if [ ! -f config.env ]; then echo "Error: config.env not found. Copy config.env.example to config.env and edit it."; exit 1; fi
+	@cp config.env genmedia4commerce/config.env
+
 # ==============================================================================
 # Playground Targets
 # ==============================================================================
 
 # Launch local dev playground
-playground:
+playground: sync-config
 	@echo "==============================================================================="
 	@echo "| 🚀 Starting your agent playground...                                        |"
 	@echo "|                                                                             |"
@@ -49,9 +57,7 @@ backend: deploy
 
 # Deploy to Agent Engine with app-specific resource requirements
 # Usage: make deploy-agent-engine [AGENT_IDENTITY=true] [SECRETS="KEY=SECRET_ID,..."]
-deploy-agent-engine:
-	@if [ ! -f config.env ]; then echo "Error: config.env not found"; exit 1; fi
-	cp config.env genmedia4commerce/config.env
+deploy-agent-engine: sync-config
 	source config.env && gcloud config set project $$PROJECT_ID --quiet && \
 	(uv export --no-hashes --no-header --no-dev --no-emit-project --no-annotate > genmedia4commerce/app_utils/.requirements.txt 2>/dev/null || \
 	uv export --no-hashes --no-header --no-dev --no-emit-project > genmedia4commerce/app_utils/.requirements.txt) && \
@@ -76,9 +82,7 @@ deploy-agent-engine:
 # Deploy to Cloud Run via Cloud Build (full app: ADK agent + REST API + MCP server + frontend)
 # Prerequisite: run 'make setup-infra' once to create AR repo, IAM bindings, etc.
 # Usage: make deploy-cloudrun
-deploy-cloudrun:
-	@if [ ! -f config.env ]; then echo "Error: config.env not found"; exit 1; fi
-	cp config.env genmedia4commerce/config.env
+deploy-cloudrun: sync-config
 	@source config.env && gcloud config set project $$PROJECT_ID --quiet && \
 	gcloud run deploy $$SERVICE_NAME \
 		--source=. \
@@ -160,7 +164,7 @@ dev:
 	make run-backend & make run-frontend & wait
 
 # Run the combined FastAPI server locally (ADK agent API + REST endpoints + MCP server + frontend)
-run-backend:
+run-backend: sync-config
 	MCP_SERVER_URL=http://localhost:8081/sse PYTHONPATH=$(PYTHONPATH) uv run uvicorn genmedia4commerce.fast_api_app:app --host 0.0.0.0 --port 8000 --reload
 
 # Build and run frontend dev server (target named to avoid conflict with frontend/ directory)
@@ -168,7 +172,7 @@ run-frontend:
 	@cd frontend && npm install && npm run build && npm run dev
 
 # Run the MCP server over HTTP/SSE (for external agents/clients)
-mcp-server:
+mcp-server: sync-config
 	PYTHONPATH=$(PYTHONPATH) uv run python -m mcp_server.server --transport sse --port 8081
 
 # ==============================================================================
@@ -176,11 +180,11 @@ mcp-server:
 # ==============================================================================
 
 # Fine-tune Gemini LoRA for shoe side classification
-train-shoe-model:
+train-shoe-model: sync-config
 	PYTHONPATH=$(PYTHONPATH) uv run python infra/model_training/finetune_gemini_lora.py
 
 # Evaluate all shoe classifier endpoints and update config.env with the best one
-eval-set-shoe-model:
+eval-set-shoe-model: sync-config
 	PYTHONPATH=$(PYTHONPATH) uv run python infra/model_training/eval_gemini_lora.py
 
 # ==============================================================================

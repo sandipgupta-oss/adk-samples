@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.3.2 - Upgrades
+
+- Upgrade video model to veo-3.1-generate-001
+- Pin dependencies
+- Update README.md
+
 ## v0.3.1 - Refactor deployment and model updates
 
 - Upgraded image generation model to `imagen-4.0-ultra-generate-001`.

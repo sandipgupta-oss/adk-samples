@@ -20,7 +20,7 @@ from dotenv import set_key
 from vertexai import agent_engines
 from vertexai.preview.reasoning_engines import AdkApp
 
-from rag.agent import root_agent
+from rag.agent import app as adk_app
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -54,7 +54,7 @@ def update_env_file(agent_engine_id, env_file_path):
 
 logger.info("deploying app...")
 app = AdkApp(
-    agent=root_agent,
+    agent=adk_app,
     enable_tracing=True,
 )
 
@@ -63,13 +63,14 @@ logging.debug("deploying agent to agent engine:")
 remote_app = agent_engines.create(
     app,
     requirements=[
-        "google-cloud-aiplatform[adk,agent-engines]==1.108.0",
-        "google-adk==1.10.0",
+        "google-cloud-aiplatform[adk,agent-engines]>=1.108.0",
+        "google-adk[eval]>=1.31.0",
         "python-dotenv",
         "google-auth",
         "tqdm",
         "requests",
         "llama-index",
+        "pydantic-settings",
     ],
     extra_packages=[
         "./rag",

@@ -38,23 +38,14 @@ from .services import EvalService, GuidelineService
 from .utils import generate_radar_chart, logger
 
 # --- Environment Variables ---
-PROJECT_ID = os.getenv("PROJECT_ID") or os.getenv("GOOGLE_CLOUD_PROJECT")
-LOCATION = os.getenv("LOCATION") or os.getenv("GOOGLE_CLOUD_LOCATION")
-MODEL_NAME = os.getenv("MODEL_NAME")
-GCS_BUCKET = os.getenv("GCS_BUCKET_NAME")
+PROJECT_ID = os.getenv("PROJECT_ID", os.getenv("GOOGLE_CLOUD_PROJECT"))
+LOCATION = os.getenv("LOCATION", os.getenv("GOOGLE_CLOUD_LOCATION"))
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
+GCS_BUCKET = os.getenv(
+    "GCS_BUCKET_NAME",
+    f"{os.getenv('GOOGLE_CLOUD_PROJECT')}-brandaligner-agent-assets",
+)
 
-# --- Service Initialization ---
-if not all(
-    [
-        PROJECT_ID,
-        LOCATION,
-        MODEL_NAME,
-        GCS_BUCKET,
-    ]
-):
-    raise OSError(
-        "Required environment variables for services are not set. Please set PROJECT_ID, LOCATION, MODEL_NAME and GCS_BUCKET."
-    )
 guideline_service = GuidelineService(
     project_id=PROJECT_ID, location=LOCATION, model_name=MODEL_NAME
 )

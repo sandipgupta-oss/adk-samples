@@ -1,12 +1,35 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { useState, useRef, useEffect } from 'react';
 import { marked } from 'marked';
 import TopNav from '../../components/TopNav';
+
+interface ProductItem {
+  images?: { uri: string }[];
+  title: string;
+  brand?: string;
+  price_info?: { price: number };
+}
 
 type Message = {
   id: number;
   sender: 'user' | 'aida';
   text: string;
-  products?: any[];
+  products?: ProductItem[];
   isDetailsVisible?: boolean;
 };
 
@@ -35,7 +58,7 @@ export default function PersonalAssistant() {
 
     const botMessageId = Date.now() + 1;
     let botText = '';
-    let botProducts: any[] | undefined = undefined;
+    let botProducts: ProductItem[] | undefined = undefined;
 
     setMessages(prev => [...prev, { id: botMessageId, sender: 'aida', text: '' }]);
 

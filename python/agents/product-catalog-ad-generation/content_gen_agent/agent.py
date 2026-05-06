@@ -92,7 +92,7 @@ accomplish this.
 
 root_agent = Agent(
     name="content_generation_agent",
-    model="gemini-3-flash-preview",
+    model="gemini-2.5-flash",
     instruction=SYSTEM_INSTRUCTION,
     tools=[
         load_artifacts,

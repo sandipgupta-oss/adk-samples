@@ -48,8 +48,8 @@ load_dotenv()
 client = initialize_gemini_client()
 
 # --- Configuration ---
-STORYLINE_MODEL = "gemini-3-flash-preview"
-IMAGE_GEN_MODEL = "gemini-3-pro-image-preview"
+STORYLINE_MODEL = "gemini-2.5-flash"
+IMAGE_GEN_MODEL = "gemini-3.1-flash-image-preview"
 MAX_RETRIES = 3
 
 

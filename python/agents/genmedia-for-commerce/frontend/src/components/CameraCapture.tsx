@@ -1,6 +1,23 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { useState, useRef, useEffect, useCallback } from 'react'
 
 // FaceMesh is loaded globally from script tag in index.html
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 declare const FaceMesh: any
 
 interface CameraCaptureProps {
@@ -21,8 +38,10 @@ function CameraCapture({ isOpen, onCapture, onClose }: CameraCaptureProps) {
 
   const videoRef = useRef<HTMLVideoElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const faceMeshRef = useRef<any>(null)
   const analysisIntervalRef = useRef<number | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lastResultsRef = useRef<any>(null)
 
   // Stop camera and cleanup
@@ -77,6 +96,7 @@ function CameraCapture({ isOpen, onCapture, onClose }: CameraCaptureProps) {
   }, [])
 
   // Analyze face position from MediaPipe landmarks
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const analyzeFacePosition = useCallback((landmarks: any[], width: number, height: number): FacePosition => {
     if (!landmarks || landmarks.length === 0) return 'not-detected'
 
@@ -183,6 +203,7 @@ function CameraCapture({ isOpen, onCapture, onClose }: CameraCaptureProps) {
         minTrackingConfidence: 0.5
       })
 
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       faceMesh.onResults((results: any) => {
         lastResultsRef.current = results
       })

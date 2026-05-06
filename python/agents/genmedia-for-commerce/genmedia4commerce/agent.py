@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-GenMedia ADK Agent.
+"""GenMedia ADK Agent.
 
 Routes user requests to the appropriate media generation workflow
 via MCP tools served by the GenMedia MCP server.
@@ -75,7 +74,6 @@ if not logger.handlers:
 project_id = os.environ["GOOGLE_CLOUD_PROJECT"]
 
 
-
 async def build_conversational_history(
     callback_context: CallbackContext, llm_request: LlmRequest
 ) -> None:
@@ -90,7 +88,6 @@ async def build_conversational_history(
     - Optimizes the conversation history sent to the LLM (e.g. stripping
       large binary payloads, ensuring clean context).
     """
-
     timestamp = str(int(time.time()))
     if "uploaded_images_base64" not in callback_context.state:
         callback_context.state["uploaded_images_base64"] = []
@@ -284,8 +281,9 @@ async def inject_uploaded_images(
 async def handle_tool_response(
     tool: BaseTool, args: dict, tool_context: ToolContext, tool_response: dict
 ) -> dict | None:
-    """After-tool callback: intercept MCP tool results, save media as artifacts,
-    and persist a structured function_response to GCS history.
+    """After-tool callback to intercept MCP tool results.
+
+    Save media as artifacts, and persist a structured function_response to GCS history.
 
     - Catalog: FunctionResponse with description text + image URI per item via parts
     - Other tools: uploads generated media to GCS, FunctionResponse with URI parts

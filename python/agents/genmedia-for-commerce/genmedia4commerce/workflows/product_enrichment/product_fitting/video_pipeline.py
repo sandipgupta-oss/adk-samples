@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Video generation pipeline for product fitting.
+"""Video generation pipeline for product fitting.
+
 Mimics the logic of video VTO clothes but adapts to different framings.
 """
 
@@ -22,19 +22,17 @@ import base64
 import logging
 import os
 import uuid
+from collections.abc import AsyncGenerator
 from concurrent.futures import ThreadPoolExecutor
-from io import BytesIO
 from pathlib import Path
-from typing import AsyncGenerator
 
 from dotenv import load_dotenv
 from google import genai
-from PIL import Image
 
 from workflows.shared.image_utils import crop_face
 from workflows.shared.person_eval import evaluate_person_match, validate_model_photo
-from workflows.shared.video_utils import extract_frames_as_bytes_list
 from workflows.shared.veo_utils import generate_veo_r2v
+from workflows.shared.video_utils import extract_frames_as_bytes_list
 
 logger = logging.getLogger(__name__)
 
@@ -87,7 +85,7 @@ Light and camera movement: Static camera; medium shot (waist up).
 LOWER_BODY_VEO_PROMPT = """
 Subject: Identical lower body from reference images. Garment details must remain perfectly consistent. Frame strictly from the waist down (waist to shoes); upper body and head are outside the frame. Do not invent details; reproduce the garment and shoes exactly from references.
 
-Scene: Professional studio, high-key white background, centered framing. 
+Scene: Professional studio, high-key white background, centered framing.
 Lighting: Bright, even studio lighting highlighting technical fabric textures.
 
 Movement & Physics: Natural human motion with organic weight shifts. Avoid mechanical rotation. Model must move with fluid, lifelike steps and weight distribution. Fabric should show realistic tension and folding during movement.
@@ -104,17 +102,19 @@ Camera: Strictly static close-up from waist to feet throughout all sequences.
 # ---------------------------------------------------------------------------
 # Helpers
 # ---------------------------------------------------------------------------
-def _create_reference_images(front_bytes: bytes, back_bytes: bytes | None, framing: str) -> list[bytes]:
+def _create_reference_images(
+    front_bytes: bytes, back_bytes: bytes | None, framing: str
+) -> list[bytes]:
     """Create reference images for Veo based on framing and available views."""
     refs = []
-    
+
     # Use exact image bytes natively to avoid aspect ratio mismatch with Veo (9:16)
     refs.append(front_bytes)
-    
+
     # Add back image if provided
     if back_bytes is not None:
         refs.append(back_bytes)
-        
+
     # Add face crop if detected in front image and we still need a 2nd image
     if len(refs) == 1 and framing in ("full_body", "upper_body"):
         face_bytes = crop_face(front_bytes, padding_ratio=0.5)
@@ -133,7 +133,9 @@ def _evaluate_clip(
 ) -> float:
     """Evaluate face similarity for a single clip."""
     if reference_face_bytes is None:
-        logger.info(f"[Face Eval] Clip {clip_index}: skipping face eval (no reference face)")
+        logger.info(
+            f"[Face Eval] Clip {clip_index}: skipping face eval (no reference face)"
+        )
         return 100.0  # Pass by default if no face to evaluate
 
     frames = extract_frames_as_bytes_list(video_bytes)
@@ -194,8 +196,7 @@ async def run_animate_product_fitting(
     number_of_videos: int = 4,
     prompt: str = "",
 ) -> AsyncGenerator[dict, None]:
-    """
-    Animate product fitting images into videos.
+    """Animate product fitting images into videos.
 
     Args:
         front_image: Image bytes of the model wearing garments (front view).
@@ -206,6 +207,7 @@ async def run_animate_product_fitting(
 
     Yields:
         dict with status updates.
+
     """
     _ensure_config()
 
@@ -213,25 +215,27 @@ async def run_animate_product_fitting(
     reference_face_bytes = await asyncio.get_event_loop().run_in_executor(
         None, crop_face, front_image
     )
-    
+
     # Validate model photo only if face is present
     if reference_face_bytes is not None:
         validation = await asyncio.get_event_loop().run_in_executor(
             None, validate_model_photo, front_image
         )
         if not validation["valid"]:
-            logger.warning(f"[AnimateFitting] Validation failed: {validation['reason']}")
+            logger.warning(
+                f"[AnimateFitting] Validation failed: {validation['reason']}"
+            )
             yield {"status": "error", "detail": validation["reason"]}
             return
     else:
-        logger.info("[AnimateFitting] No face detected in input image, skipping face validation.")
+        logger.info(
+            "[AnimateFitting] No face detected in input image, skipping face validation."
+        )
 
     project_id = os.getenv("PROJECT_ID", "my_project")
     global_region = os.getenv("GLOBAL_REGION", "global")
 
-    veo_client = genai.Client(
-        vertexai=True, project=project_id, location=global_region
-    )
+    veo_client = genai.Client(vertexai=True, project=project_id, location=global_region)
 
     yield {"status": "generating_videos"}
 
@@ -244,7 +248,7 @@ async def run_animate_product_fitting(
     else:
         effective_prompt = DEFAULT_VEO_PROMPT
         prompt_name = "DEFAULT"
- 
+
     logger.info(f"[AnimateFitting] Using {prompt_name} prompt")
 
     reference_images = _create_reference_images(front_image, back_image, framing)
@@ -254,7 +258,7 @@ async def run_animate_product_fitting(
 
     def _check_first_clip(video_bytes: bytes) -> bool:
         if reference_face_bytes is None:
-            return True # Skip check if no face
+            return True  # Skip check if no face
         score = _evaluate_clip(video_bytes, reference_face_bytes, clip_index=0)
         logger.info(f"[AnimateFitting] First clip early check: score = {score:.1f}%")
         return score >= EARLY_ABORT_THRESHOLD
@@ -282,14 +286,17 @@ async def run_animate_product_fitting(
 
         # Generate videos in parallel
         with ThreadPoolExecutor(max_workers=number_of_videos) as executor:
-            futures = [executor.submit(_generate_one, i) for i in range(number_of_videos)]
-            
+            futures = [
+                executor.submit(_generate_one, i) for i in range(number_of_videos)
+            ]
+
             first_checked = False
             video_bytes_list = [None] * number_of_videos
             future_to_index = {f: i for i, f in enumerate(futures)}
             aborted = False
 
             from concurrent.futures import as_completed
+
             for completed in as_completed(futures):
                 idx = future_to_index[completed]
                 video_bytes_list[idx] = completed.result()
@@ -297,7 +304,9 @@ async def run_animate_product_fitting(
                 if not first_checked and reference_face_bytes is not None:
                     first_checked = True
                     if not _check_first_clip(video_bytes_list[idx]):
-                        logger.warning("[AnimateFitting] First clip failed check — cancelling remaining clips")
+                        logger.warning(
+                            "[AnimateFitting] First clip failed check — cancelling remaining clips"
+                        )
                         for f in futures:
                             f.cancel()
                         aborted = True
@@ -305,11 +314,13 @@ async def run_animate_product_fitting(
 
         if aborted:
             if attempt == MAX_RETRIES:
-                logger.error(f"[AnimateFitting] All {MAX_RETRIES} attempts failed early-abort check")
+                logger.error(
+                    f"[AnimateFitting] All {MAX_RETRIES} attempts failed early-abort check"
+                )
             continue
 
         video_bytes_list = [v for v in video_bytes_list if v is not None]
-        
+
         # Evaluate
         scores = await asyncio.get_event_loop().run_in_executor(
             None, _evaluate_all_clips, video_bytes_list, reference_face_bytes
@@ -317,7 +328,7 @@ async def run_animate_product_fitting(
         logger.info(f"[AnimateFitting] Scores: {scores}")
 
         ranked = sorted(
-            zip(scores, video_bytes_list),
+            zip(scores, video_bytes_list, strict=False),
             key=lambda x: x[0],
             reverse=True,
         )
@@ -326,10 +337,10 @@ async def run_animate_product_fitting(
 
         filtered = [
             (s, v)
-            for s, v in zip(scores, sorted_videos)
+            for s, v in zip(scores, sorted_videos, strict=False)
             if s >= MIN_SIMILARITY_THRESHOLD
         ]
-        
+
         if filtered or reference_face_bytes is None:
             # If no face, we don't filter by face score, just take what we got
             if reference_face_bytes is None:
@@ -351,9 +362,7 @@ async def run_animate_product_fitting(
     final_scores = [s for s, _ in filtered]
     final_videos = [v for _, v in filtered]
 
-    encoded_videos = [
-        base64.b64encode(v).decode("utf-8") for v in final_videos
-    ]
+    encoded_videos = [base64.b64encode(v).decode("utf-8") for v in final_videos]
     filenames = [f"video_fitting_{uuid.uuid4()}.mp4" for _ in final_videos]
 
     yield {

@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Shared utilities for Veo video generation.
+"""Shared utilities for Veo video generation.
+
 Supports image-to-video, interpolation (start/end frames), and R2V (reference images) modes.
 """
 
@@ -51,8 +51,7 @@ def generate_veo(
     enhance_prompt=None,
     generate_audio=False,
 ):
-    """
-    Generate video using Veo from a starting image.
+    """Generate video using Veo from a starting image.
 
     Supports two modes:
     - Image-to-video: Only provide `image`, Veo animates from that frame
@@ -73,6 +72,7 @@ def generate_veo(
 
     Returns:
         list[bytes]: List of generated video bytes, or empty list if generation fails
+
     """
     first_frame = Image(imageBytes=image, mime_type="image/png")
 
@@ -127,8 +127,7 @@ def generate_veo_r2v(
     seed=None,
     aspect_ratio="16:9",
 ):
-    """
-    Generate video using Veo with reference images (R2V mode).
+    """Generate video using Veo with reference images (R2V mode).
 
     Args:
         client: Veo client instance
@@ -140,9 +139,11 @@ def generate_veo_r2v(
         generate_audio: Whether to generate audio (default: False)
         person_generation: Person generation setting (e.g., "allow_adult")
         seed: Random seed (default: None, let Veo choose)
+        aspect_ratio: Video aspect ratio (default: "16:9")
 
     Returns:
         bytes: Generated video data
+
     """
     ref_images_list = []
     for img_bytes in reference_images:

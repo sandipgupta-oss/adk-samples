@@ -140,7 +140,7 @@ def main(mode):
     GOOGLE_CLOUD_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT")
     GOOGLE_CLOUD_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION")
     if not GOOGLE_CLOUD_LOCATION or GOOGLE_CLOUD_LOCATION == "global":
-        GOOGLE_CLOUD_LOCATION = "us-central1"
+        GOOGLE_CLOUD_LOCATION = "us-east1"
     # Ensure GCP_STAGING_BUCKET is just the name, setup_staging_bucket will add gs:// prefix
     GCP_STAGING_BUCKET_NAME = os.getenv("GCP_STAGING_BUCKET", "").replace("gs://", "")
     if not GCP_STAGING_BUCKET_NAME:
@@ -162,7 +162,7 @@ def main(mode):
     env_vars = {
         "GCP_PROJECT": str(os.getenv("GOOGLE_CLOUD_PROJECT")),
         "GCP_LOCATION": str(
-            os.getenv("GOOGLE_CLOUD_LOCATION") or "us-central1"
+            os.getenv("GOOGLE_CLOUD_LOCATION") or "us-east1"
         ),
         "GEMINI_MODEL_NAME": str(
             os.getenv("GEMINI_MODEL_NAME") or "gemini-2.5-flash"

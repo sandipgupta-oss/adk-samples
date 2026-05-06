@@ -30,7 +30,7 @@ from content_gen_agent.utils.evaluation_prompts import (
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
-EVALUATION_MODEL = "gemini-3-flash-preview"
+EVALUATION_MODEL = "gemini-2.5-flash"
 
 
 class EvalResult(BaseModel):

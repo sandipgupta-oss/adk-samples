@@ -1,3 +1,19 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
@@ -7,9 +23,15 @@ export default defineConfig({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          'vendor': ['react', 'react-dom', 'react-router-dom'],
-          'mediapipe': ['@mediapipe/face_mesh', '@mediapipe/camera_utils']
+        // Vite 8 / Rolldown requires a function (object form was removed).
+        manualChunks: (id) => {
+          if (!id.includes('node_modules')) return
+          if (id.includes('/react-router-dom/') || id.includes('/react-dom/') || id.includes('/react/')) {
+            return 'vendor'
+          }
+          if (id.includes('@mediapipe/face_mesh') || id.includes('@mediapipe/camera_utils')) {
+            return 'mediapipe'
+          }
         }
       }
     },
@@ -19,10 +41,7 @@ export default defineConfig({
     }
   },
   optimizeDeps: {
-    include: ['@mediapipe/face_mesh', '@mediapipe/camera_utils'],
-    esbuildOptions: {
-      target: 'es2020'
-    }
+    include: ['@mediapipe/face_mesh', '@mediapipe/camera_utils']
   },
   server: {
     port: 3000,

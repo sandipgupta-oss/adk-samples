@@ -22,10 +22,10 @@ requires-python = ">=3.10,<3.13"
 dependencies = [
     "beautifulsoup4==4.13.4",
     "dbt-bigquery==1.10.1",
-    "fastapi==0.116.1",
+    "fastapi==0.124.1",
     "uvicorn==0.35.0",
     "GitPython==3.1.45",
-    "google-adk==1.16.0",
+    "google-adk==1.31.0",
     "google-api-python-client==2.177.0",
     "google-cloud-monitoring==2.27.2",
     "google-cloud-dataform==0.7.0",

@@ -12,8 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Debug utilities for saving intermediate images during processing.
+"""Debug utilities for saving intermediate images during processing.
 
 Set environment variable DEBUG_IMAGES=1 to enable debug image saving.
 Images are saved to src/shared/debug/{timestamp}/
@@ -21,7 +20,6 @@ Images are saved to src/shared/debug/{timestamp}/
 
 import io
 import logging
-import os
 from datetime import datetime
 from pathlib import Path
 
@@ -68,8 +66,7 @@ def get_current_session_key():
 
 
 def save_debug_image(img_bytes, step_name, prefix=""):
-    """
-    Save an image to the debug folder with a descriptive name.
+    """Save an image to the debug folder with a descriptive name.
 
     Args:
         img_bytes: Image as bytes
@@ -78,6 +75,7 @@ def save_debug_image(img_bytes, step_name, prefix=""):
 
     Returns:
         Path to saved file, or None if saving failed
+
     """
     if not DEBUG_ENABLED:
         return None

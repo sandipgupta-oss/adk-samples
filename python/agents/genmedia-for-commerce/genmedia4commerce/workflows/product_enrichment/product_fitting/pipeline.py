@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Core fitting pipeline: classification, description, sequential retry generation.
+"""Core fitting pipeline: classification, description, sequential retry generation.
+
 Shared by both the SSE (testing) and JSON (production) endpoints.
 """
 
@@ -22,12 +22,10 @@ import base64
 import json
 import logging
 
-from datetime import datetime
-from typing import Optional, Any
 from fastapi.concurrency import run_in_threadpool
-from workflows.shared.debug_utils import save_debug_image, get_current_session_key
-from workflows.shared.image_utils import preprocess_images
 
+from workflows.shared.debug_utils import get_current_session_key, save_debug_image
+from workflows.shared.image_utils import preprocess_images
 from workflows.shared.nano_banana import NANO_TIMEOUT_SECONDS
 
 from .classification import (
@@ -222,7 +220,7 @@ async def _generate_view(
     gen_kwargs: dict | None = None,
     product_id: str | None = None,
     category: str = "",
-    session_key: Optional[str] = None,
+    session_key: str | None = None,
 ):
     """Generate images sequentially with fix attempts, up to max_retries.
 
@@ -357,7 +355,11 @@ async def _generate_view(
             fitting_image = None
 
         if fitting_image:
-            save_debug_image(fitting_image, f"attempt_{attempt + 1}", prefix=f"{view_name}_{session_key}")
+            save_debug_image(
+                fitting_image,
+                f"attempt_{attempt + 1}",
+                prefix=f"{view_name}_{session_key}",
+            )
 
         if fitting_image is None:
             request_logger.info(
@@ -633,7 +635,9 @@ async def run_fitting_pipeline(
     all_sse_events: list[str] = []
 
     session_key = get_current_session_key()
-    request_logger.info(f"[Fitting][Key:{session_key}] Preprocessing garment images (extract + upscale)")
+    request_logger.info(
+        f"[Fitting][Key:{session_key}] Preprocessing garment images (extract + upscale)"
+    )
     garment_images_bytes = await run_in_threadpool(
         preprocess_images,
         garment_images_bytes,

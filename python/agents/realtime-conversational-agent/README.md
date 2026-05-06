@@ -149,8 +149,8 @@ The server handles the AI agent logic and WebSocket connections.
 
     # Your Google Cloud project ID
     GOOGLE_CLOUD_PROJECT="PASTE_YOUR_ACTUAL_PROJECT_ID"
-    # Your Vertex AI location (e.g., us-central1)
-    GOOGLE_CLOUD_LOCATION="us-central1"
+    # Your Vertex AI location (e.g., us-east1)
+    GOOGLE_CLOUD_LOCATION="us-east1"
 
     # Configuration for the agent's voice (Example: 'Puck' for gemini-live-2.5-flash)
     AGENT_VOICE="Puck"

@@ -24,6 +24,7 @@ from http import HTTPStatus
 import aiohttp
 import google.auth
 import google.auth.transport.requests
+from google import genai
 from google.adk.tools import ToolContext
 from google.api_core.exceptions import GoogleAPICallError
 from google.cloud import texttospeech
@@ -38,14 +39,13 @@ MAX_RETRIES = 3
 STATIC_AUDIO_FALLBACK = "static/audio/audio_track_1.mp3"
 TTS_MODEL_NAME = "gemini-2.5-flash-preview-tts"
 TTS_VOICE_NAME = "Schedar"
-LYRIA_MODEL_ID = "lyria-002"
-LYRIA_LOCATION = "us-central1"
+LYRIA_MODEL_ID = "lyria-3-clip-preview"
 
 
 async def generate_audio(
     audio_query: str, tool_context: ToolContext
 ) -> dict[str, str] | None:
-    """Generates an audio clip using the Lyria model via REST API.
+    """Generates an audio clip using the Lyria model via GenAI SDK.
 
     Args:
         audio_query (str): The prompt describing the desired audio content.
@@ -57,98 +57,40 @@ async def generate_audio(
     Returns:
         A dictionary with the generated audio artifact name, or a fallback.
     """
-    project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
-    if not project_id:
-        logging.error("GOOGLE_CLOUD_PROJECT environment variable not set.")
-        return {"name": STATIC_AUDIO_FALLBACK}
-
-    url = (
-        f"https://{LYRIA_LOCATION}-aiplatform.googleapis.com/v1/"
-        f"projects/{project_id}/locations/{LYRIA_LOCATION}/publishers/"
-        f"google/models/{LYRIA_MODEL_ID}:predict"
-    )
-
-    try:
-        # Get credentials
-        creds, _ = google.auth.default()
-        auth_req = google.auth.transport.requests.Request()
-        creds.refresh(auth_req)
-        token = creds.token
-    except Exception as e:
-        logging.error("Failed to get Google auth credentials: %s", e)
-        return {"name": STATIC_AUDIO_FALLBACK}
-
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json",
-    }
-
-    payload = {
-        "instances": [{"prompt": audio_query}],
-        "parameters": {"sample_count": 1},
-    }
-
     for attempt in range(MAX_RETRIES):
         try:
             logging.info(
-                "Generating audio with query: %s (Attempt %s/%s)",
+                "Generating audio with query via GenAI: %s (Attempt %s/%s)",
                 audio_query,
                 attempt + 1,
                 MAX_RETRIES,
             )
-            async with aiohttp.ClientSession() as session:
-                async with session.post(
-                    url, headers=headers, json=payload
-                ) as resp:
-                    if resp.status == HTTPStatus.OK:
-                        data = await resp.json()
-                        predictions = data.get("predictions")
-                        if (
-                            not predictions
-                            or "bytesBase64Encoded" not in predictions[0]
-                        ):
-                            logging.warning(
-                                "No audioContent in Lyria response."
-                            )
-                            raise ValueError("Invalid response format")
 
-                        audio_b64 = predictions[0]["bytesBase64Encoded"]
-                        audio_data = base64.b64decode(audio_b64)
-                        filename = f"audio_{int(time.time())}.wav"
-                        await tool_context.save_artifact(
-                            filename,
-                            types.Part.from_bytes(
-                                data=audio_data, mime_type="audio/wav"
-                            ),
-                        )
-                        return {"name": filename}
+            client = genai.Client()
+            response = await client.aio.models.generate_content(
+                model=LYRIA_MODEL_ID,
+                contents=audio_query,
+            )
 
-                    elif resp.status in [429, 500, 503]:
-                        # Transient error
-                        error_text = await resp.text()
-                        wait_time = (2**attempt) + random.uniform(0, 1)
-                        logging.warning(
-                            "Attempt %s/%s failed (status %s): %s. "
-                            "Retrying in %.2f seconds...",
-                            attempt + 1,
-                            MAX_RETRIES,
-                            resp.status,
-                            error_text,
-                            wait_time,
-                        )
-                        await asyncio.sleep(wait_time)
-                        continue
-                    else:
-                        # Non-retryable error
-                        error_text = await resp.text()
-                        logging.error(
-                            "Audio generation failed (status %s): %s",
-                            resp.status,
-                            error_text,
-                        )
+            audio_data = None
+            if response.parts:
+                for part in response.parts:
+                    if part.inline_data and part.inline_data.data:
+                        audio_data = part.inline_data.data
                         break
 
-        except (aiohttp.ClientError, ValueError, Exception) as e:
+            if not audio_data:
+                logging.warning("No inline_data found in Lyria response.")
+                raise ValueError("No audio data returned by model")
+
+            filename = f"audio_{int(time.time())}.mp3"
+            await tool_context.save_artifact(
+                filename,
+                types.Part.from_bytes(data=audio_data, mime_type="audio/mp3"),
+            )
+            return {"name": filename}
+
+        except Exception as e:
             if attempt < MAX_RETRIES - 1:
                 wait_time = (2**attempt) + random.uniform(0, 1)
                 logging.warning(

@@ -35,7 +35,7 @@ logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
-VIDEO_MODEL = "veo-3.1-generate-preview"
+VIDEO_MODEL = "veo-3.1-generate-001"
 GCS_TEMPLATE_IMAGE_FOLDER = "template_images/"
 ALLOWED_IMAGE_EXTENSIONS = (".png", ".jpg", ".jpeg")
 VIDEO_ASPECT_RATIO = "9:16"

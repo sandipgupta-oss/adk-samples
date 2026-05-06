@@ -60,7 +60,7 @@ fi
 RAG_CORPUS_ID=$(echo $RAG_CORPUS | awk -F'/' '{print $NF}')
 
 # Define the RAG Corpus resource
-RAG_CORPUS="projects/${PROJECT_NUMBER}/locations/us-central1/ragCorpora/${RAG_CORPUS_ID}"
+RAG_CORPUS="projects/${PROJECT_NUMBER}/locations/us-east1/ragCorpora/${RAG_CORPUS_ID}"
 
 echo "Granting permissions to $SERVICE_ACCOUNT..."
 

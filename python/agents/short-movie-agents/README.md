@@ -1,5 +1,5 @@
 # Short Movie Agents
-ADK version: 1.14.1, Owner: @rsamborski
+ADK version: 1.31.1, Owner: @rsamborski
 
 Short Movie Agents demo is an ADK example showcasing a multi-agent architecture to construct end to end videos based on the user's intent. It includes agents which have a different role each:
 
@@ -130,6 +130,7 @@ Use this path to run the **adk-samples** checkout of Short Movie Agents without 
    - **ADK web UI:** Either run `make playground` or:
 
      ```bash
+     source .env
      uv run adk web . --port 8501 --reload_agents
      ```
 
@@ -138,6 +139,7 @@ Use this path to run the **adk-samples** checkout of Short Movie Agents without 
    - **ADK CLI:**
 
      ```bash
+     source .env
      uv run adk run app
      ```
 
@@ -146,6 +148,22 @@ Use this path to run the **adk-samples** checkout of Short Movie Agents without 
 ```bash
 uv sync --dev
 uv run pytest
+```
+
+### Storage Bucket
+
+Note that the agent uses a bucket for storing generated storyboards and videos. You can create a bucket by running:
+
+```
+gcloud storage buckets create gs://YOUR_BUCKET_NAME --project=PROJECT_ID --location=LOCATION
+```
+
+Make sure the account running the agent has read/write permissions to that bucket by running:
+
+```
+gcloud storage buckets add-iam-policy-binding gs://YOUR_BUCKET_NAME \
+    --member="serviceAccount:service-PROJECT_NUMBER@gcp-sa-aiplatform.iam.gserviceaccount.com" \
+    --role="roles/storage.objectAdmin"
 ```
 
 </details>

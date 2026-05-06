@@ -38,7 +38,7 @@ log = get_logger("config")
 
 # Exported Config Variables (Directly read from environment)
 GOOGLE_CLOUD_PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT") 
-GOOGLE_CLOUD_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "us-central1") 
+GOOGLE_CLOUD_LOCATION = os.getenv("GOOGLE_CLOUD_LOCATION", "us-east1") 
 ROOT_MODEL = os.getenv("GEMINI_MODEL_NAME","gemini-2.5-flash")
 IMAGE_GENERATION_MODEL = os.getenv("IMAGE_GENERATION_MODEL", "imagen-3.0-generate-002")
 PROJECT_NUMBER = os.getenv("GOOGLE_CLOUD_PROJECT_NUMBER","")

@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Utilities for R2V (Reference-to-Video) product spinning video generation.
-"""
+"""Utilities for R2V (Reference-to-Video) product spinning video generation."""
 
 # Third-party imports
 from google.genai import types
@@ -33,8 +31,8 @@ VEO_R2V_PROMPT_TEMPLATE = """**[Subject]:** {{description}}
 def generate_product_description(
     client, gemini_model: str, all_images_bytes: list
 ) -> str:
-    """
-    Generate a description of the product from images using Gemini.
+    """Generate a description of the product from images using Gemini.
+
     Generalized version for any product (not just footwear).
 
     Args:
@@ -44,6 +42,7 @@ def generate_product_description(
 
     Returns:
         str: Product description in the format "A [type] standing still in a completely white studio void (Hex: #FFFFFF, RGB: 255, 255, 255)""
+
     """
     system_prompt = """You are an expert in product analysis. Your role is to return a very short description of the product you see in the images.
 Always return the description using the following template: A [type of product], standing still in a completely white studio void (Hex: #FFFFFF, RGB: 255, 255, 255)"

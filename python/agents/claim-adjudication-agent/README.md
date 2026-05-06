@@ -7,7 +7,7 @@ The **Health Claim Adjudication Agent** is a sophisticated, multi-agent workflow
 The agent streamlines the end-to-end lifecycle of a cashless health insurance claim:
 1.  **Discovery**: Retrieves medical documents and invoices directly from Google Cloud Storage for a specific claim ID.
 2.  **Admissibility**: Verifies policy coverage, identifies pre-existing diseases (PED), and checks waiting periods.
-3.  **Adjudication**: Analyzes hospital bills against policy terms, co-payments, deductibles, and hospital MOUs.
+3.  **Adjudication**: Analyzes hospital bills against policy terms, co-payments, deductibles.
 4.  **Synthesis**: Consolidates technical findings into a professional, structured report for final approval.
 
 ## Agent Details
@@ -63,10 +63,10 @@ Set up your `.env` file with the following credentials:
 ```bash
 GOOGLE_GENAI_USE_VERTEXAI=1
 GOOGLE_CLOUD_PROJECT=<your-project-id>
-GOOGLE_CLOUD_LOCATION=us-central1
+GOOGLE_CLOUD_LOCATION=<region>
 GEMINI_FLASH=gemini-2.5-flash
 CLAIM_DOCUMENTS_BUCKET=<your-gcs-bucket-name>
-CLAIM_DOCUMENTS_BUCKET_FOLDER=health_claim_documents
+CLAIM_DOCUMENTS_BUCKET_FOLDER=<doc_folder>
 ```
 
 ## Running the Agent
@@ -98,8 +98,8 @@ I am now initiating the parallel evaluation of admissibility and financial adjud
 - Status: Admissible
 - Total Billed: ₹1,50,000
 - Total Payable: ₹1,35,000
-- Deductions: ₹15,000 (MOU Disallowance)
-- Conclusion: The claim is approved as per the 'Elevate' policy terms.
+- Deductions: ₹15,000
+- Conclusion: The claim is approved.
 ```
 
 ## Running Tests

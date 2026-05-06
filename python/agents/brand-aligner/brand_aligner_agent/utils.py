@@ -32,9 +32,9 @@ logger.setLevel(level=logging.DEBUG)
 matplotlib.use("Agg")
 
 # --- Environment Variables ---
-PROJECT_ID = os.getenv("PROJECT_ID") or os.getenv("GOOGLE_CLOUD_PROJECT")
-LOCATION = os.getenv("LOCATION") or os.getenv("GOOGLE_CLOUD_LOCATION")
-MODEL_NAME = os.getenv("MODEL_NAME")
+PROJECT_ID = os.getenv("PROJECT_ID", os.getenv("GOOGLE_CLOUD_PROJECT"))
+LOCATION = os.getenv("LOCATION", os.getenv("GOOGLE_CLOUD_LOCATION"))
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
 
 RADAR_CHART_GROUPING_PROMPT = """
 You are a data visualization expert. You are given a list of several criterion categories extracted from brand guidelines.

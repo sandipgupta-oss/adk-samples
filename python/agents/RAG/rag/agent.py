@@ -18,6 +18,7 @@ import uuid
 import google.auth
 from dotenv import load_dotenv
 from google.adk.agents import Agent
+from google.adk.apps import App
 from google.adk.tools.retrieval.vertex_ai_rag_retrieval import (
     VertexAiRagRetrieval,
 )
@@ -32,7 +33,7 @@ load_dotenv()
 
 _, project_id = google.auth.default()
 os.environ.setdefault("GOOGLE_CLOUD_PROJECT", project_id)
-os.environ["GOOGLE_CLOUD_LOCATION"] = "global"
+os.environ.setdefault("GOOGLE_CLOUD_LOCATION", "us-east1")
 os.environ.setdefault("GOOGLE_GENAI_USE_VERTEXAI", "True")
 
 _ = instrument_adk_with_arize()
@@ -52,7 +53,7 @@ if rag_corpus:
             rag.RagResource(
                 # please fill in your own rag corpus
                 # here is a sample rag corpus for testing purpose
-                # e.g. projects/123/locations/us-central1/ragCorpora/456
+                # e.g. projects/123/locations/us-east1/ragCorpora/456
                 rag_corpus=rag_corpus
             )
         ],
@@ -68,3 +69,8 @@ with using_session(session_id=uuid.uuid4()):
         instruction=return_instructions_root(),
         tools=tools,
     )
+
+app = App(
+    root_agent=root_agent,
+    name="rag_agent",
+)

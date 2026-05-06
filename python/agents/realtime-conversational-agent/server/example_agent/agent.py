@@ -21,7 +21,7 @@ genai_config = GenerateContentConfig(temperature=0.5)
 
 root_agent = Agent(
     name="example_agent",
-    model="gemini-live-2.5-flash-preview-native-audio",
+    model="gemini-live-2.5-flash-native-audio",
     description="A helpful AI assistant.",
     instruction=AGENT_INSTRUCTION,
 )

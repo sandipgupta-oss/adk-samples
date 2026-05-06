@@ -12,9 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""
-Shared generic utilities for parallel processing and common operations.
-"""
+"""Shared generic utilities for parallel processing and common operations."""
 
 # Standard library imports
 from concurrent.futures import ThreadPoolExecutor
@@ -26,8 +24,7 @@ from tqdm import tqdm
 def predict_parallel(
     to_predict, predict_function, max_workers=8, show_progress_bar=True
 ):
-    """
-    Execute a function in parallel across multiple inputs using ThreadPoolExecutor.
+    """Execute a function in parallel across multiple inputs using ThreadPoolExecutor.
 
     Args:
         to_predict: Iterable of inputs to process
@@ -37,6 +34,7 @@ def predict_parallel(
 
     Returns:
         list: Results from applying predict_function to each input
+
     """
     results = []
     with ThreadPoolExecutor(max_workers=max_workers) as pool:

@@ -27,7 +27,7 @@ from .tools import (
 )
 from .utils import after_model_callback
 
-MODEL_NAME = os.getenv("MODEL_NAME")
+MODEL_NAME = os.getenv("MODEL_NAME", "gemini-2.5-flash")
 
 # --- AGENT DEFINITIONS ---
 

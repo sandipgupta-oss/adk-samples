@@ -48,13 +48,14 @@ def create() -> None:
         adk_app,
         display_name=root_agent.name,
         requirements=[
-            "google-adk>=1.27.0",
-            "google-cloud-aiplatform[agent-engines]>=1.142.0",
-            "google-genai>=1.68.0",
+            "google-adk>=1.31.1",
+            "google-cloud-aiplatform[agent-engines]>=1.148.1",
+            "google-genai>=1.73.1",
             "pydantic>=2.12.5",
             "python-dotenv>=1.2.2",
             "absl-py>=2.1.0",
             "pandas>=2.2.3,<3.0.0",
+            "google-cloud-logging>=3.15.0",
         ],
         extra_packages=["./claim_adjudication_agent"],
     )
@@ -89,7 +90,7 @@ def main(argv: list[str]) -> None:
     # Priority: Flag -> Env -> None
     project_id = FLAGS.project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
     location = (
-        FLAGS.location or os.getenv("GOOGLE_CLOUD_LOCATION") or "us-central1"
+        FLAGS.location or os.getenv("GOOGLE_CLOUD_LOCATION") or "us-east1"
     )
     # Using the existing bucket from .env
     bucket = FLAGS.bucket or os.getenv("AE_DEPLOYMENT_BUCKET")

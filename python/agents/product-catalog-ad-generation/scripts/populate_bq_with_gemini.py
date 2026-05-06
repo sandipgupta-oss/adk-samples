@@ -167,7 +167,7 @@ def main():
         "--dataset_id", required=True, help="BigQuery Dataset ID"
     )
     parser.add_argument("--table_id", required=True, help="BigQuery Table ID")
-    parser.add_argument("--region", default="us-central1", help="GCP Region")
+    parser.add_argument("--region", default="us-east1", help="GCP Region")
     args = parser.parse_args()
 
     # Check and create dataset if needed

@@ -42,7 +42,7 @@ def main(argv: list[str]) -> None:
     # Priority: Flag -> Env -> None
     project_id = FLAGS.project_id or os.getenv("GOOGLE_CLOUD_PROJECT")
     location = (
-        FLAGS.location or os.getenv("GOOGLE_CLOUD_LOCATION") or "us-central1"
+        FLAGS.location or os.getenv("GOOGLE_CLOUD_LOCATION") or "us-east1"
     )
     bucket = os.getenv("CLAIM_DOCUMENTS_BUCKET")
 

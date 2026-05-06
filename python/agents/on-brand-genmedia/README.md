@@ -69,14 +69,14 @@ The Guidelines Driven Media Gen Agent implements a sequential workflow using spe
     git clone https://github.com/google/adk-samples.git
     cd adk-samples/python/agents/on-brand-genmedia
     # Install the package and dependencies.
-    uv sync --dev
+    uv sync
     ```
 
 3.  **Configuration**
 
     *   Set up Google Cloud credentials.
 
-        *   There is a `.env-example` file included in the repository. Update this file with the values appropriate to your project, and save it as `.env`. The values in this file will be read into the environment of your application.
+        *   Copy the `.env.example` file and save it as `.env`. Open `.env` and fill in the values appropriate to your project (e.g., `GOOGLE_CLOUD_PROJECT`, `GCS_BUCKET_NAME`). The values in this file will be read into the environment of your application.
 
     *   Authenticate your GCloud account.
 
@@ -156,7 +156,7 @@ You can deploy the Guidelines Driven Media Gen Agent directly to Google Cloud's 
     {
       "operation": "create",
       "project_id": "YOUR_GCP_PROJECT",
-      "location": "us-central1",
+      "location": "us-east1",
       "bucket_name": "YOUR_STAGING_BUCKET"
     }
     ```

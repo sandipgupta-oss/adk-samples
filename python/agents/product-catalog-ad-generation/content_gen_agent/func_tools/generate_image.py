@@ -43,7 +43,7 @@ load_dotenv()
 
 GCP_PROJECT = os.getenv("GCP_PROJECT")
 
-IMAGE_GEN_MODEL_GEMINI = "gemini-3-pro-image-preview"
+IMAGE_GEN_MODEL_GEMINI = "gemini-3.1-flash-image-preview"
 
 MAX_RETRIES = 3
 ASSET_SHEET_FILENAME = "asset_sheet.png"

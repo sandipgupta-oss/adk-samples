@@ -1,3 +1,19 @@
+/**
+ * Copyright 2026 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { useState, useEffect } from 'react'
 import { PRODUCTS, CAPABILITIES } from '../../config/featureConstraints'
 import type { Product } from '../../config/featureConstraints'
@@ -38,7 +54,6 @@ function GlassesVideoVTO({
   const [generatedVideos, setGeneratedVideos] = useState<string[]>([])
   const [videoFilenames, setVideoFilenames] = useState<string[]>([])
   const [selectedVideoIndex, setSelectedVideoIndex] = useState(0)
-  const [_collageData, setCollageData] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [isEnhancingPrompt, setIsEnhancingPrompt] = useState(false)
   const [modelImage, setModelImage] = useState<string | null>(null)
@@ -119,7 +134,6 @@ function GlassesVideoVTO({
 
       setGeneratedVideos(videoUrls)
       setVideoFilenames(response.filenames)
-      setCollageData(response.collage_data)
       setSelectedVideoIndex(0)
     } catch (err) {
       console.error('Error generating video:', err)
@@ -134,7 +148,6 @@ function GlassesVideoVTO({
     generatedVideos.forEach(url => URL.revokeObjectURL(url))
     setGeneratedVideos([])
     setVideoFilenames([])
-    setCollageData(null)
     setSelectedVideoIndex(0)
     setUploadedImage(null)
     setModelImage(null)
@@ -147,7 +160,6 @@ function GlassesVideoVTO({
     generatedVideos.forEach(url => URL.revokeObjectURL(url))
     setGeneratedVideos([])
     setVideoFilenames([])
-    setCollageData(null)
     setSelectedVideoIndex(0)
     setUploadedImage(null)
     setModelImage(null)

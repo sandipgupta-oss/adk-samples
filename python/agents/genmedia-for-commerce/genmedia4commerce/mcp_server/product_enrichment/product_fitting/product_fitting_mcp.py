@@ -21,12 +21,14 @@ import os
 from google import genai
 
 from workflows.product_enrichment.product_fitting.pipeline import run_fitting_pipeline
-from workflows.product_enrichment.product_fitting.video_pipeline import run_animate_product_fitting
+from workflows.product_enrichment.product_fitting.video_pipeline import (
+    run_animate_product_fitting,
+)
 
 logger = logging.getLogger(__name__)
 
 # Model photo presets directory
-from genmedia4commerce.config import BACKEND_ASSETS_DIR
+from genmedia4commerce.config import BACKEND_ASSETS_DIR  # noqa: E402
 
 MODELS_DIR = BACKEND_ASSETS_DIR / "product_enrichment" / "product_fitting" / "models"
 REQUIRED_MODEL_PHOTOS = {"front_top", "front_bottom"}
@@ -111,6 +113,7 @@ async def run_product_fitting(
 
     Returns:
         Dictionary with front and back results including image_base64, status, and validation.
+
     """
     if not garment_images_base64:
         return {"error": "At least one garment image is required."}
@@ -122,7 +125,7 @@ async def run_product_fitting(
         try:
             return base64.b64decode(val)
         except Exception as e:
-            raise ValueError(f"Invalid base64 for {label}: {e}")
+            raise ValueError(f"Invalid base64 for {label}: {e}") from e
 
     garment_images_bytes: list[bytes | str] = []
     for idx, img_b64 in enumerate(garment_images_base64):
@@ -213,7 +216,7 @@ async def run_product_fitting_animation(
     prompt: str = "",
 ) -> dict:
     """Generate product fitting video.
-    
+
     Args:
         front_image_base64: Base64 encoded front image.
         back_image_base64: Optional base64 encoded back image.
@@ -221,16 +224,17 @@ async def run_product_fitting_animation(
         number_of_videos: Number of videos to generate.
         prompt: Optional custom animation prompt.
         garment_images_base64: Optional list of base64-encoded original garment images.
-        
+
     Returns:
         Dictionary with videos (base64), scores, and filenames.
+
     """
     try:
         front_bytes = base64.b64decode(front_image_base64)
         back_bytes = base64.b64decode(back_image_base64) if back_image_base64 else None
-        
+
     except Exception as e:
-        raise ValueError(f"Invalid encoding: {e}")
+        raise ValueError(f"Invalid encoding: {e}") from e
 
     logger.info(
         f"[MCP product_fitting] Starting animation: framing={framing}, "
@@ -257,7 +261,9 @@ async def run_product_fitting_animation(
             "filenames": final_event["filenames"],
         }
     elif final_event and final_event["status"] == "error":
-        logger.warning(f"[MCP product_fitting] Animation failed: {final_event['detail']}")
+        logger.warning(
+            f"[MCP product_fitting] Animation failed: {final_event['detail']}"
+        )
         return {"error": final_event["detail"]}
     else:
         logger.warning("[MCP product_fitting] Animation yielded no result")

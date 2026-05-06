@@ -148,5 +148,5 @@ The agent relies on the following key environment variables (defined in `.env`):
 * `MODEL_NAME`: The name of the generative model to use for agent reasoning and evaluation (for example, `gemini-2.5-flash`).
 * `GCS_BUCKET_NAME`: The GCS bucket for storing artifacts and processed files.
 * `PROJECT_ID`: The Google Cloud Project ID.
-* `LOCATION`: The Google Cloud region (for example, `us-central1`).
+* `LOCATION`: The Google Cloud region (for example, `us-east1`).
 * `AUTH_ID`, `OAUTH_CLIENT_ID`, `OAUTH_CLIENT_SECRET`: Authentication credentials for the OAuth2 flow (if running in standalone mode).

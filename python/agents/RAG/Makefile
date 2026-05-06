@@ -21,7 +21,7 @@ setup_corpus:
 		echo "GOOGLE_CLOUD_PROJECT=$$PROJECT_ID" >> .env; \
 	fi
 	@if ! grep -q "^GOOGLE_CLOUD_LOCATION=" .env; then \
-		echo "GOOGLE_CLOUD_LOCATION=us-central1" >> .env; \
+		echo "GOOGLE_CLOUD_LOCATION=us-east1" >> .env; \
 	fi
 	@read -p "Do you want to deploy the sample RAG corpus for this agent? (y/n) " deploy_corpus; \
 	if [ "$$deploy_corpus" = "y" ] || [ "$$deploy_corpus" = "Y" ]; then \
@@ -39,8 +39,8 @@ grant_permissions:
 	@echo "==============================================================================="
 	@echo "| Deploying Agent Engine with RAG Corpus & Granting Permissions               |"
 	@echo "==============================================================================="
-	@if grep -q "^RAG_CORPUS=" .env; then \
-		CORPUS_VAL=$$(grep "^RAG_CORPUS=" .env | cut -d '=' -f2- | tr -d "'\""); \
+	@if [ ! -z "$$RAG_CORPUS" ] || grep -q "^RAG_CORPUS=" .env 2>/dev/null; then \
+		CORPUS_VAL=$${RAG_CORPUS:-$$(grep "^RAG_CORPUS=" .env | cut -d '=' -f2- | tr -d "'\"")}; \
 		echo "Injecting RAG_CORPUS=$$CORPUS_VAL via --set-env-vars..."; \
 		(uv export --no-hashes --no-header --no-dev --no-emit-project --no-annotate > rag/app_utils/.requirements.txt 2>/dev/null || \
 		uv export --no-hashes --no-header --no-dev --no-emit-project > rag/app_utils/.requirements.txt) && \
@@ -58,5 +58,14 @@ grant_permissions:
 			echo "Warning: rag/shared_libraries/grant_permissions.sh not found."; \
 		fi \
 	else \
-		echo "Skipping custom deploy and IAM grant: RAG_CORPUS not found in .env. Falling back to standard deploy..."; \
+		echo "RAG_CORPUS not found. Falling back to standard deploy..."; \
+		(uv export --no-hashes --no-header --no-dev --no-emit-project --no-annotate > rag/app_utils/.requirements.txt 2>/dev/null || \
+		uv export --no-hashes --no-header --no-dev --no-emit-project > rag/app_utils/.requirements.txt) && \
+		uv run -m rag.app_utils.deploy \
+			--source-packages=./rag \
+			--entrypoint-module=rag.agent_engine_app \
+			--entrypoint-object=agent_engine \
+			--requirements-file=rag/app_utils/.requirements.txt \
+			$(if $(AGENT_IDENTITY),--agent-identity) \
+			$(if $(filter command line,$(origin SECRETS)),--set-secrets="$(SECRETS)"); \
 	fi

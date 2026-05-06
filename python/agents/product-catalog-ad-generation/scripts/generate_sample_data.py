@@ -27,7 +27,7 @@ from pydantic import BaseModel, Field
 load_dotenv()
 
 PROJECT = os.getenv("GOOGLE_CLOUD_PROJECT")
-LOCATION = os.getenv("GCP_LOCATION", "us-central1")
+LOCATION = os.getenv("GCP_LOCATION", "us-east1")
 COMPANY_NAME = os.getenv("COMPANY_NAME", "ACME Corp")
 
 # Output directories
@@ -117,7 +117,7 @@ async def generate_plan(
     try:
         logging.info("🤖 Generating product plan with Gemini...")
         response = await client.aio.models.generate_content(
-            model="gemini-3-flash-preview",
+            model="gemini-2.5-flash",
             contents=[prompt],
             config=types.GenerateContentConfig(
                 response_mime_type="application/json",
@@ -182,7 +182,7 @@ async def generate_and_save_image(
             contents.extend(input_parts)
 
         response = await client.aio.models.generate_content(
-            model="gemini-2.5-flash-image",
+            model="gemini-3.1-flash-image-preview",
             contents=contents,
             config=types.GenerateContentConfig(
                 response_modalities=["IMAGE"],

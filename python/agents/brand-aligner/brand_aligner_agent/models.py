@@ -20,7 +20,6 @@ from pydantic import BaseModel, Field
 
 
 class Severity(StrEnum):
-
     BLOCKER = "BLOCKER"
     WARNING = "WARNING"
 

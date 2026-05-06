@@ -261,7 +261,7 @@ The starter pack will prompt you to select deployment options and provides addit
     ```bash
     export GOOGLE_GENAI_USE_VERTEXAI=1
     export GOOGLE_CLOUD_PROJECT=my-project
-    export GOOGLE_CLOUD_LOCATION=us-central1
+    export GOOGLE_CLOUD_LOCATION=us-east1
     ```
 
 5. Run the agent:

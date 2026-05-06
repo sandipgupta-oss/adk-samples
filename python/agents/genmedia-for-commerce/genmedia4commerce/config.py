@@ -134,7 +134,9 @@ def pull_assets():
 
 
 if not project_id:
-    raise ValueError("PROJECT_ID is not set. Check config.env or environment variables.")
+    raise ValueError(
+        "PROJECT_ID is not set. Check config.env or environment variables."
+    )
 MEDIA_BUCKET = f"{project_id}-genmedia-for-commerce-media-payloads"
 
 # ---------------------------------------------------------------------------
@@ -178,6 +180,7 @@ class GenMediaConfig:
     Attributes:
         agent_model: Model for the router agent.
         mcp_server_url: URL of the MCP server (SSE endpoint).
+
     """
 
     agent_model: str = "gemini-2.5-flash"

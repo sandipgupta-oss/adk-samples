@@ -12,7 +12,7 @@ amount_adjudication_agent = LlmAgent(
     model=GEMINI_FLASH,
     description=(
         "Adjudicates claim amounts by analyzing hospital bills and invoices against "
-        "policy terms, co-payments, deductibles, and hospital MOUs."
+        "policy terms, co-payments, deductibles."
     ),
     instruction=AMOUNT_ADJUDICATION_AGENT_PROMPT,
     output_key="amount_adjudication_agent_output",
